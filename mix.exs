@@ -16,7 +16,7 @@ defmodule FellowshipApi.MixProject do
   def application do
     [
       mod: {FellowshipApi.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :observer, :wx]
     ]
   end
 
@@ -31,6 +31,7 @@ defmodule FellowshipApi.MixProject do
       {:ecto_sql, "~> 3.12"},
       {:postgrex, ">= 0.0.0"},
       {:plug_cowboy, "~> 2.7"},
+      {:nature_whistle, "~> 0.4.4"},
       {:bandit, "~> 1.5"},
       {:jason, "~> 1.4"},
       {:bcrypt_elixir, "~> 3.2"},

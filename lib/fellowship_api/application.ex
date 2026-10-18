@@ -8,6 +8,7 @@ defmodule FellowshipApi.Application do
       FellowshipApi.Repo,
       {Phoenix.PubSub, name: FellowshipApi.PubSub},
       {Oban, Application.fetch_env!(:fellowship_api, Oban)},
+      {NatureWhistle.Supervisor, []},
       FellowshipApiWeb.Endpoint
     ]
 

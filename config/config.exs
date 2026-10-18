@@ -27,4 +27,35 @@ config :fellowship_api, Oban,
      ]}
   ]
 
+config :nature_whistle,
+  notifiers_config: [
+    %{
+      name: :slack_primary,
+      service: :slack,
+      config: %{
+        webhook_url: System.get_env("NATURE_WHISTLE_SLACK_WEBHOOK_URL")
+      }
+    }
+  ],
+  alerts: [],
+  packs: [
+    {
+      NatureWhistle.Packs.Beam,
+      thresholds: [
+        memory: 1_073_741_824
+      ],
+      notifiers: [:slack_primary]
+    },
+    {
+      NatureWhistle.Packs.Ecto,
+      repo: FellowshipApi.Repo,
+      thresholds: [
+        slow_query: 1_000,
+        slow_queue: 50,
+        slow_db_execution: false
+      ],
+      notifiers: [:slack_primary]
+    }
+  ]
+
 import_config "#{config_env()}.exs"
