@@ -8,6 +8,7 @@ defmodule FellowshipApi.Accounts.Member do
     field :phone_number, :string
     field :password, :string, virtual: true, redact: true
     field :password_hash, :string, redact: true
+    field :token_version, :integer, default: 0
     field :status, :string, default: "active"
     field :gender, Ecto.Enum, values: [male: "male", female: "female"]
     field :residence_address, :string
@@ -21,13 +22,12 @@ defmodule FellowshipApi.Accounts.Member do
     member
     |> cast(attrs, [:full_name, :email, :phone_number, :password, :gender, :residence_address])
     |> update_change(:email, &String.downcase(String.trim(&1)))
-    |> validate_required([:full_name, :phone_number, :password, :gender, :residence_address])
+    |> validate_required([:full_name, :phone_number, :password, :gender, :residence_address, :email])
     |> validate_length(:full_name, min: 2, max: 120)
     |> validate_length(:phone_number, min: 7, max: 30)
     |> validate_length(:password, min: 8, max: 72)
     |> validate_format(:email, ~r/^[^\s]+@[^\s]+\.[^\s]+$/,
-      message: "must be a valid email",
-      allow_nil: true
+      message: "must be a valid email"
     )
     |> unique_constraint(:email, name: :members_lower_email_index)
     |> unique_constraint(:phone_number)

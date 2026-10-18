@@ -6,7 +6,6 @@ defmodule FellowshipUmbrella.MixProject do
       apps_path: "apps",
       version: "0.1.0",
       start_permanent: Mix.env() == :prod,
-      listeners: [Phoenix.CodeReloader],
       deps: [],
       aliases: aliases()
     ]
@@ -16,7 +15,9 @@ defmodule FellowshipUmbrella.MixProject do
     [
       setup: ["deps.get", "ecto.setup"],
       "ecto.setup": ["cmd --app fellowship_api mix ecto.setup"],
-      "ecto.reset": ["cmd --app fellowship_api mix ecto.reset"]
+      "ecto.reset": ["cmd --app fellowship_api mix ecto.reset"],
+      "phx.server": ["holo"],
+      test: ["cmd --app fellowship_api mix test"]
     ]
   end
 end

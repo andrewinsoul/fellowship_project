@@ -75,18 +75,34 @@ defmodule FellowshipApiWeb.AuthController do
   def logout(conn, _params),
     do: json(conn, %{data: %{message: "Signed out. Discard the token on this device."}})
 
+  def forgot_password(conn, %{"email" => email}) when is_binary(email) do
+    if String.match?(String.trim(email), ~r/^[^\s]+@[^\s]+\.[^\s]+$/) do
+      Accounts.request_password_reset(email)
+    end
+
+    json(conn, %{data: %{message: "If an account matches that email address, recovery instructions will be sent."}})
+  end
+
   def forgot_password(conn, _params) do
-    # Password reset delivery is intentionally not implemented in this starter.
-    json(conn, %{
-      data: %{
-        message:
-          "If an account matches those details, recovery instructions will be sent when password recovery is configured."
-      }
-    })
+    conn
+    |> put_status(:unprocessable_entity)
+    |> json(%{error: %{code: "invalid_email", message: "A valid email address is required."}})
+  end
+
+  def reset_password(conn, %{"token" => token, "password" => password})
+      when is_binary(token) and is_binary(password) and byte_size(password) >= 8 and byte_size(password) <= 72 do
+    case Accounts.reset_password(token, password) do
+      {:ok, :ok} -> json(conn, %{data: %{message: "Password updated. Please sign in again on your devices."}})
+      _ -> conn |> put_status(:unprocessable_entity) |> json(%{error: %{code: "invalid_or_expired_token", message: "This reset link is invalid or has expired. Request a new one."}})
+    end
+  end
+
+  def reset_password(conn, _params) do
+    conn |> put_status(:unprocessable_entity) |> json(%{error: %{code: "invalid_reset_request", message: "Provide a valid reset token and a password of at least 8 characters."}})
   end
 
   def issue_token(member),
-    do: Phoenix.Token.sign(FellowshipApiWeb.Endpoint, "member auth", member.id)
+    do: Phoenix.Token.sign(FellowshipApiWeb.Endpoint, "member auth", %{id: member.id, token_version: member.token_version || 0})
 
   def member_json(member) do
     %{

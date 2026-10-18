@@ -4,3 +4,4 @@
 *.ez
 .env
 .DS_Store
+apps/fellowship_api/priv/static/hologram/*

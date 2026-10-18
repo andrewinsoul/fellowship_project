@@ -16,6 +16,7 @@ defmodule FellowshipApiWeb.Router do
     post "/auth/register", AuthController, :register_and_check_in
     post "/auth/login", AuthController, :login
     post "/auth/forgot-password", AuthController, :forgot_password
+    post "/auth/reset-password", AuthController, :reset_password
     get "/meetings/next", MeetingController, :next
     get "/check-in/session", MeetingController, :check_in_session
     get "/quotations", QuotationController, :index

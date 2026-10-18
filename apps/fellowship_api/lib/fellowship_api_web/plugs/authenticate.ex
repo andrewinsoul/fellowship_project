@@ -6,11 +6,12 @@ defmodule FellowshipApiWeb.Plugs.Authenticate do
 
   def call(conn, _opts) do
     with ["Bearer " <> token] <- get_req_header(conn, "authorization"),
-         {:ok, member_id} <-
+         {:ok, %{id: member_id, token_version: token_version}} <-
            Phoenix.Token.verify(FellowshipApiWeb.Endpoint, "member auth", token,
              max_age: 60 * 60 * 24 * 30
            ),
-         member when not is_nil(member) <- Accounts.get_member(member_id) do
+         member when not is_nil(member) <- Accounts.get_member(member_id),
+         true <- member.token_version == token_version do
       assign(conn, :current_member, member)
     else
       _ ->
