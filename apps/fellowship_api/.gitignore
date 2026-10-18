@@ -1,0 +1,7 @@
+/_build/
+/cover/
+/deps/
+*.ez
+.env
+.DS_Store
+qr-check-in.md
