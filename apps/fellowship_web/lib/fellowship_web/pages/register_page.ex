@@ -90,6 +90,18 @@ defmodule FellowshipWeb.RegisterPage do
     |> put_command(:register, event: Map.get(params, :event, %{}))
   end
 
+  def action(:auth_result, params, component) do
+    if params.success do
+      component
+      |> put_state(:loading, false)
+      |> put_page(FellowshipWeb.HomePage)
+    else
+      component
+      |> put_state(:loading, false)
+      |> put_state(:message, params.message)
+      |> put_state(:message_type, "error")
+    end
+  end
 
   def command(:register, params, server) do
     event = event_params(params)
@@ -118,19 +130,6 @@ defmodule FellowshipWeb.RegisterPage do
       {:error, changeset} ->
         message = registration_error(changeset)
         put_action(server, :auth_result, message: message, success: false)
-    end
-  end
-
-  def action(:auth_result, params, component) do
-    if params.success do
-      component
-      |> put_state(:loading, false)
-      |> put_page(FellowshipWeb.HomePage)
-    else
-      component
-      |> put_state(:loading, false)
-      |> put_state(:message, params.message)
-      |> put_state(:message_type, "error")
     end
   end
 

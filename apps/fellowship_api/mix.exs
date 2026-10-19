@@ -28,6 +28,7 @@ defmodule FellowshipApi.MixProject do
       {:phoenix, "~> 1.7.21"},
       {:phoenix_pubsub, "~> 2.1"},
       {:phoenix_ecto, "~> 4.6"},
+      {:swoosh, "~> 1.16"},
       {:ecto_sql, "~> 3.12"},
       {:postgrex, ">= 0.0.0"},
       {:plug_cowboy, "~> 2.7"},

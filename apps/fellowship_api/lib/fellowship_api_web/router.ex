@@ -1,6 +1,10 @@
 defmodule FellowshipApiWeb.Router do
   use FellowshipApiWeb, :router
 
+  if Mix.env() == :dev do
+    forward "/dev/mailbox", Plug.Swoosh.MailboxPreview
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end

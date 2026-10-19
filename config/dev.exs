@@ -1,5 +1,13 @@
 import Config
 
+config :swoosh, :api_client, false
+
+config :fellowship_api, :mail_delivery, :local
+
+config :fellowship_api,
+       FellowshipApi.LocalMailer,
+       adapter: Swoosh.Adapters.Local
+
 config :fellowship_api, FellowshipApi.Repo,
   username: System.get_env("DB_USER", "postgres"),
   password: System.get_env("DB_PASSWORD", "postgres"),

@@ -159,6 +159,19 @@ defmodule FellowshipWeb.ProfilePage do
     |> put_command(:save_profile, event: Map.get(params, :event, %{}))
   end
 
+  def action(:profile_saved, params, component) do
+    component
+    |> put_state(:loading, false)
+    |> put_state(:full_name, params.full_name || "")
+    |> put_state(:email, params.email || "")
+    |> put_state(:phone_number, params.phone_number || "")
+    |> put_state(:member_name, params.full_name || "Fellowship member")
+    |> put_state(:member_initials, initials(params.full_name))
+    |> put_state(:message, params.message)
+    |> put_state(:message_type, params.message_type)
+  end
+
+  def action(:logged_out, _params, component), do: put_page(component, FellowshipWeb.LoginPage)
 
   def command(:save_profile, params, server) do
     event = Map.get(params, :event, %{})
@@ -203,20 +216,6 @@ defmodule FellowshipWeb.ProfilePage do
       |> delete_session(:auth_token)
       |> delete_session(:member_id)
       |> put_action(:logged_out)
-
-  def action(:profile_saved, params, component) do
-    component
-    |> put_state(:loading, false)
-    |> put_state(:full_name, params.full_name || "")
-    |> put_state(:email, params.email || "")
-    |> put_state(:phone_number, params.phone_number || "")
-    |> put_state(:member_name, params.full_name || "Fellowship member")
-    |> put_state(:member_initials, initials(params.full_name))
-    |> put_state(:message, params.message)
-    |> put_state(:message_type, params.message_type)
-  end
-
-  def action(:logged_out, _params, component), do: put_page(component, FellowshipWeb.LoginPage)
 
   defp event_value(event, key) when is_map(event) do
     value = Map.get(event, key, Map.get(event, Atom.to_string(key), ""))

@@ -59,6 +59,18 @@ defmodule FellowshipWeb.LoginPage do
     |> put_command(:login, event: Map.get(params, :event, %{}))
   end
 
+  def action(:auth_result, params, component) do
+    if params.success do
+      component
+      |> put_state(:loading, false)
+      |> put_page(FellowshipWeb.HomePage)
+    else
+      component
+      |> put_state(:loading, false)
+      |> put_state(:message, params.message)
+      |> put_state(:message_type, "error")
+    end
+  end
 
   def command(:login, params, server) do
     event = Map.get(params, :event, %{})
@@ -82,19 +94,6 @@ defmodule FellowshipWeb.LoginPage do
           message: "The details provided could not be verified.",
           success: false
         )
-    end
-  end
-
-  def action(:auth_result, params, component) do
-    if params.success do
-      component
-      |> put_state(:loading, false)
-      |> put_page(FellowshipWeb.HomePage)
-    else
-      component
-      |> put_state(:loading, false)
-      |> put_state(:message, params.message)
-      |> put_state(:message_type, "error")
     end
   end
 

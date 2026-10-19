@@ -1,11 +1,15 @@
 defmodule FellowshipWeb.ResetPasswordPage do
   use Hologram.Page
-  route("/reset-password")
+  route("/reset-password/:token")
+  param(:token, :string)
+
   layout(FellowshipWeb.MainLayout)
 
   def init(params, component, _server) do
+    token = Map.get(params, :token, Map.get(params, "token", ""))
+
     component
-    |> put_state(:token, Map.get(params, "token", ""))
+    |> put_state(:token, token)
     |> put_state(:message, "")
     |> put_state(:loading, false)
   end
@@ -41,9 +45,23 @@ defmodule FellowshipWeb.ResetPasswordPage do
   def action(:submit_reset_password, params, component) do
     component
     |> put_state(:loading, true)
-    |> put_command(:reset_password, token: component.state.token, event: Map.get(params, :event, %{}))
+    |> put_command(:reset_password,
+      token: component.state.token,
+      event: Map.get(params, :event, %{})
+    )
   end
 
+  def action(:reset_result, params, component) do
+    if params.success do
+      component
+      |> put_state(:loading, false)
+      |> put_page(FellowshipWeb.LoginPage)
+    else
+      component
+      |> put_state(:loading, false)
+      |> put_state(:message, params.message)
+    end
+  end
 
   def command(:reset_password, params, server) do
     event = Map.get(params, :event, %{})
@@ -62,18 +80,6 @@ defmodule FellowshipWeb.ResetPasswordPage do
           message: "This reset link is invalid or expired. Request a new one.",
           success: false
         )
-    end
-  end
-
-  def action(:reset_result, params, component) do
-    if params.success do
-      component
-      |> put_state(:loading, false)
-      |> put_page(FellowshipWeb.LoginPage)
-    else
-      component
-      |> put_state(:loading, false)
-      |> put_state(:message, params.message)
     end
   end
 

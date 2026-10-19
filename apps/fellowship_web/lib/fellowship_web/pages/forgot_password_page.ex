@@ -42,6 +42,11 @@ defmodule FellowshipWeb.ForgotPasswordPage do
     |> put_command(:forgot_password, event: Map.get(params, :event, %{}))
   end
 
+  def action(:recovery_submitted, params, component) do
+    component
+    |> put_state(:loading, false)
+    |> put_state(:message, params.message)
+  end
 
   def command(:forgot_password, params, server) do
     event = Map.get(params, :event, %{})
@@ -57,11 +62,5 @@ defmodule FellowshipWeb.ForgotPasswordPage do
   defp event_value(event, key) when is_map(event) do
     value = Map.get(event, key, Map.get(event, Atom.to_string(key), ""))
     if is_binary(value), do: value, else: ""
-  end
-
-  def action(:recovery_submitted, params, component) do
-    component
-    |> put_state(:loading, false)
-    |> put_state(:message, params.message)
   end
 end
