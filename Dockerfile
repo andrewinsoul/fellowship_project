@@ -56,6 +56,8 @@ RUN chown nobody /app
 COPY --from=builder --chown=nobody:root \
     /app/_build/prod/rel/fellowship_api ./
 
+RUN chmod +x /app/bin/migrate /app/bin/server
+
 USER nobody
 
 CMD ["/app/bin/server"]
