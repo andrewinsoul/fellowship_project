@@ -33,7 +33,7 @@ config :nature_whistle,
       thresholds: [
         memory: 1_073_741_824
       ],
-      notifiers: [:slack_primary]
+      notifiers: [:console_primary]
     },
     {
       NatureWhistle.Packs.Ecto,
