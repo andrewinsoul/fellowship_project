@@ -81,6 +81,10 @@ p {
   color: #e9d9ff;
 }
 .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   border: 0;
   border-radius: 12px;
   padding: 13px 18px;
@@ -993,6 +997,9 @@ p {
   to {
     transform: rotate(360deg);
   }
+}
+.button-spinner {
+  flex-shrink: 0;
 }
 .mobile-nav {
   display: none;

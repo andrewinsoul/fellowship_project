@@ -4,7 +4,10 @@ defmodule FellowshipWeb.ResetPasswordPage do
   layout(FellowshipWeb.MainLayout)
 
   def init(params, component, _server) do
-    component |> put_state(:token, Map.get(params, "token", "")) |> put_state(:message, "")
+    component
+    |> put_state(:token, Map.get(params, "token", ""))
+    |> put_state(:message, "")
+    |> put_state(:loading, false)
   end
 
   def template do
@@ -15,7 +18,7 @@ defmodule FellowshipWeb.ResetPasswordPage do
         <p class="eyebrow">ACCOUNT RECOVERY</p>
         <h1>Choose a new password</h1>
         <p>Use at least 8 characters. This reset link can only be used once.</p>
-        <form class="form-stack" $submit={command: :reset_password}>
+        <form class="form-stack" $submit={action: :submit_reset_password}>
           <FellowshipWeb.PasswordInput
             cid="reset_password"
             label="New password"
@@ -25,7 +28,7 @@ defmodule FellowshipWeb.ResetPasswordPage do
             minlength={8}
           />
           <p class="auth-message">{@message}</p>
-          <FellowshipWeb.Button cid="reset_password_submit" type="submit" class_name="full">Reset password</FellowshipWeb.Button>
+          <FellowshipWeb.Button cid="reset_password_submit" type="submit" class_name="full" loading={@loading}>Reset password</FellowshipWeb.Button>
         </form>
         <p class="auth-switch">
           <a href="/login">Back to sign in</a>
@@ -34,6 +37,13 @@ defmodule FellowshipWeb.ResetPasswordPage do
     </main>
     """
   end
+
+  def action(:submit_reset_password, params, component) do
+    component
+    |> put_state(:loading, true)
+    |> put_command(:reset_password, token: component.state.token, event: Map.get(params, :event, %{}))
+  end
+
 
   def command(:reset_password, params, server) do
     event = Map.get(params, :event, %{})
@@ -57,9 +67,13 @@ defmodule FellowshipWeb.ResetPasswordPage do
 
   def action(:reset_result, params, component) do
     if params.success do
-      put_page(component, FellowshipWeb.LoginPage)
+      component
+      |> put_state(:loading, false)
+      |> put_page(FellowshipWeb.LoginPage)
     else
-      put_state(component, :message, params.message)
+      component
+      |> put_state(:loading, false)
+      |> put_state(:message, params.message)
     end
   end
 

@@ -9,6 +9,7 @@ defmodule FellowshipWeb.Button do
   prop(:variant, :string, default: "primary")
   prop(:class_name, :string, default: "")
   prop(:disabled, :boolean, default: false)
+  prop(:loading, :boolean, default: false)
   prop(:href, :string, default: "")
 
   def template do
@@ -24,8 +25,12 @@ defmodule FellowshipWeb.Button do
       <button
         type={@type}
         class="button {@variant} {@class_name}"
-        disabled={@disabled}
+        disabled={@disabled or @loading}
+        aria-busy={@loading}
       >
+        {%if @loading}
+          <span class="spinner button-spinner" aria-hidden="true"></span>
+        {/if}
         <slot />
       </button>
     {/if}

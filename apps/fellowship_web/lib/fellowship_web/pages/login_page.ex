@@ -9,6 +9,7 @@ defmodule FellowshipWeb.LoginPage do
     component
     |> put_state(:message, "")
     |> put_state(:message_type, "")
+    |> put_state(:loading, false)
   end
 
   def template do
@@ -19,7 +20,7 @@ defmodule FellowshipWeb.LoginPage do
         <p class="eyebrow">YOUR COMMUNITY AWAITS</p>
         <h2>Sign in</h2>
         <p>Use your email address or phone number.</p>
-        <form class="form-stack" $submit={command: :login}>
+        <form class="form-stack" $submit={action: :submit_login}>
           <FellowshipWeb.Input
             cid="login_identifier"
             name="login"
@@ -37,7 +38,7 @@ defmodule FellowshipWeb.LoginPage do
             minlength={0}
           />
           <p class="auth-message {@message_type}">{@message}</p>
-          <FellowshipWeb.Button cid="login_submit" type="submit" class_name="full">Sign in</FellowshipWeb.Button>
+          <FellowshipWeb.Button cid="login_submit" type="submit" class_name="full" loading={@loading}>Sign in</FellowshipWeb.Button>
         </form>
         <p class="auth-switch">
           Don't have an account?
@@ -51,6 +52,13 @@ defmodule FellowshipWeb.LoginPage do
     </main>
     """
   end
+
+  def action(:submit_login, params, component) do
+    component
+    |> put_state(:loading, true)
+    |> put_command(:login, event: Map.get(params, :event, %{}))
+  end
+
 
   def command(:login, params, server) do
     event = Map.get(params, :event, %{})
@@ -79,9 +87,12 @@ defmodule FellowshipWeb.LoginPage do
 
   def action(:auth_result, params, component) do
     if params.success do
-      put_page(component, FellowshipWeb.HomePage)
+      component
+      |> put_state(:loading, false)
+      |> put_page(FellowshipWeb.HomePage)
     else
       component
+      |> put_state(:loading, false)
       |> put_state(:message, params.message)
       |> put_state(:message_type, "error")
     end

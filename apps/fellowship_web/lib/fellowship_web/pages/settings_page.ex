@@ -16,6 +16,7 @@ defmodule FellowshipWeb.SettingsPage do
     |> put_state(:reminder_minutes, member.notification_reminder_minutes || 60)
     |> put_state(:message, "")
     |> put_state(:message_type, "")
+    |> put_state(:loading, false)
   end
 
   def template do
@@ -96,7 +97,7 @@ defmodule FellowshipWeb.SettingsPage do
             {%if @message != ""}
               <div class="notice {@message_type}">{@message}</div>
             {/if}
-            <form class="form-stack" $submit={command: :save_preferences}>
+            <form class="form-stack" $submit={action: :submit_save_preferences}>
               <FellowshipWeb.Checkbox
                 cid="push_notifications"
                 class_name="toggle-row"
@@ -124,7 +125,7 @@ defmodule FellowshipWeb.SettingsPage do
                 <option value="1440" selected={@reminder_minutes == 1440}>1 day before</option>
               </FellowshipWeb.Select>
               <div class="form-actions">
-                <FellowshipWeb.Button cid="settings_save" type="submit">Save preferences</FellowshipWeb.Button>
+                <FellowshipWeb.Button cid="settings_save" type="submit" loading={@loading}>Save preferences</FellowshipWeb.Button>
               </div>
             </form>
             <p class="muted settings-note">
@@ -156,6 +157,13 @@ defmodule FellowshipWeb.SettingsPage do
     </div>
     """
   end
+
+  def action(:submit_save_preferences, params, component) do
+    component
+    |> put_state(:loading, true)
+    |> put_command(:save_preferences, event: Map.get(params, :event, %{}))
+  end
+
 
   def command(:save_preferences, params, server) do
     event = Map.get(params, :event, %{})
@@ -203,6 +211,7 @@ defmodule FellowshipWeb.SettingsPage do
 
   def action(:preferences_saved, params, component) do
     component
+    |> put_state(:loading, false)
     |> put_state(:push_enabled, params.push_enabled)
     |> put_state(:email_enabled, params.email_enabled)
     |> put_state(:reminder_minutes, params.reminder_minutes)

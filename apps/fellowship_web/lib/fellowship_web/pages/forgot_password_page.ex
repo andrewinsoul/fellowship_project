@@ -5,7 +5,7 @@ defmodule FellowshipWeb.ForgotPasswordPage do
   layout(FellowshipWeb.MainLayout)
 
   def init(_params, component, _server) do
-    put_state(component, :message, "")
+    component |> put_state(:message, "") |> put_state(:loading, false)
   end
 
   def template do
@@ -16,7 +16,7 @@ defmodule FellowshipWeb.ForgotPasswordPage do
         <p class="eyebrow">ACCOUNT RECOVERY</p>
         <h1>Forgot your password?</h1>
         <p>Enter the email address associated with your account.</p>
-        <form class="form-stack" $submit={command: :forgot_password}>
+        <form class="form-stack" $submit={action: :submit_forgot_password}>
           <FellowshipWeb.Input
             cid="recovery_email"
             name="email"
@@ -26,7 +26,7 @@ defmodule FellowshipWeb.ForgotPasswordPage do
             required={true}
           />
           <p class="auth-message">{@message}</p>
-          <FellowshipWeb.Button cid="forgot_password_submit" type="submit" class_name="full">Continue</FellowshipWeb.Button>
+          <FellowshipWeb.Button cid="forgot_password_submit" type="submit" class_name="full" loading={@loading}>Continue</FellowshipWeb.Button>
         </form>
         <p class="auth-switch">
           <a href="/login">Back to sign in</a>
@@ -35,6 +35,13 @@ defmodule FellowshipWeb.ForgotPasswordPage do
     </main>
     """
   end
+
+  def action(:submit_forgot_password, params, component) do
+    component
+    |> put_state(:loading, true)
+    |> put_command(:forgot_password, event: Map.get(params, :event, %{}))
+  end
+
 
   def command(:forgot_password, params, server) do
     event = Map.get(params, :event, %{})
@@ -53,6 +60,8 @@ defmodule FellowshipWeb.ForgotPasswordPage do
   end
 
   def action(:recovery_submitted, params, component) do
-    put_state(component, :message, params.message)
+    component
+    |> put_state(:loading, false)
+    |> put_state(:message, params.message)
   end
 end

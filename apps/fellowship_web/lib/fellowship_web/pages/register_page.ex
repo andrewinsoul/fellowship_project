@@ -8,6 +8,7 @@ defmodule FellowshipWeb.RegisterPage do
     component
     |> put_state(:message, "")
     |> put_state(:message_type, "")
+    |> put_state(:loading, false)
   end
 
   def template do
@@ -18,7 +19,7 @@ defmodule FellowshipWeb.RegisterPage do
         <p class="eyebrow">JOIN THE COMMUNITY</p>
         <h2>Create an account</h2>
         <p>Enter your details to get started.</p>
-        <form class="form-stack" $submit={command: :register, params: %{}} novalidate>
+        <form class="form-stack" $submit={action: :submit_register} novalidate>
           <FellowshipWeb.Input
             cid="register_full_name"
             name="full_name"
@@ -71,7 +72,7 @@ defmodule FellowshipWeb.RegisterPage do
           <p class="auth-message {@message_type}" role="status" aria-live="polite">
             {@message}
           </p>
-          <FellowshipWeb.Button cid="register_submit" type="submit" class_name="full">Create account</FellowshipWeb.Button>
+          <FellowshipWeb.Button cid="register_submit" type="submit" class_name="full" loading={@loading}>Create account</FellowshipWeb.Button>
         </form>
         <p class="auth-switch">
           Already have an account?
@@ -82,6 +83,13 @@ defmodule FellowshipWeb.RegisterPage do
     </main>
     """
   end
+
+  def action(:submit_register, params, component) do
+    component
+    |> put_state(:loading, true)
+    |> put_command(:register, event: Map.get(params, :event, %{}))
+  end
+
 
   def command(:register, params, server) do
     event = event_params(params)
@@ -115,9 +123,12 @@ defmodule FellowshipWeb.RegisterPage do
 
   def action(:auth_result, params, component) do
     if params.success do
-      put_page(component, FellowshipWeb.HomePage)
+      component
+      |> put_state(:loading, false)
+      |> put_page(FellowshipWeb.HomePage)
     else
       component
+      |> put_state(:loading, false)
       |> put_state(:message, params.message)
       |> put_state(:message_type, "error")
     end

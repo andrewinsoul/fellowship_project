@@ -17,6 +17,7 @@ defmodule FellowshipWeb.ProfilePage do
     |> put_state(:status, member.status || "Member")
     |> put_state(:message, "")
     |> put_state(:message_type, "")
+    |> put_state(:loading, false)
   end
 
   def template do
@@ -105,12 +106,12 @@ defmodule FellowshipWeb.ProfilePage do
             {%if @message != ""}
               <div class="notice {@message_type}">{@message}</div>
             {/if}
-            <form class="form-grid" $submit={command: :save_profile}>
+            <form class="form-grid" $submit={action: :submit_save_profile}>
               <FellowshipWeb.Input cid="profile_full_name" name="full_name" label="Full name" type="text" value={@full_name} required={true} />
               <FellowshipWeb.Input cid="profile_email" name="email" label="Email address" type="email" value={@email} required={true} />
               <FellowshipWeb.Input cid="profile_phone" name="phone_number" label="Phone number" type="tel" value={@phone_number} required={true} />
               <div class="form-actions">
-                <FellowshipWeb.Button cid="profile_save" type="submit">Save changes</FellowshipWeb.Button>
+                <FellowshipWeb.Button cid="profile_save" type="submit" loading={@loading}>Save changes</FellowshipWeb.Button>
               </div>
             </form>
             <div class="settings-links">
@@ -151,6 +152,13 @@ defmodule FellowshipWeb.ProfilePage do
     </div>
     """
   end
+
+  def action(:submit_save_profile, params, component) do
+    component
+    |> put_state(:loading, true)
+    |> put_command(:save_profile, event: Map.get(params, :event, %{}))
+  end
+
 
   def command(:save_profile, params, server) do
     event = Map.get(params, :event, %{})
@@ -198,6 +206,7 @@ defmodule FellowshipWeb.ProfilePage do
 
   def action(:profile_saved, params, component) do
     component
+    |> put_state(:loading, false)
     |> put_state(:full_name, params.full_name || "")
     |> put_state(:email, params.email || "")
     |> put_state(:phone_number, params.phone_number || "")
