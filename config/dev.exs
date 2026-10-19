@@ -10,13 +10,42 @@ config :fellowship_api, FellowshipApi.Repo,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
-config :fellowship_api, FellowshipApiWeb.Endpoint,
+config :fellowship_web, FellowshipWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: String.to_integer(System.get_env("PORT", "4000"))],
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
   secret_key_base: "dev-secret-key-base-dev-secret-key-base-dev-secret-key-base-1234567890",
   watchers: []
+
+config :nature_whistle,
+  notifiers_config: [
+    %{
+      name: :console_primary,
+      service: :console,
+      config: %{}
+    }
+  ],
+  alerts: [],
+  packs: [
+    {
+      NatureWhistle.Packs.Beam,
+      thresholds: [
+        memory: 1_073_741_824
+      ],
+      notifiers: [:slack_primary]
+    },
+    {
+      NatureWhistle.Packs.Ecto,
+      repo: FellowshipApi.Repo,
+      thresholds: [
+        slow_query: 1_000,
+        slow_queue: 50,
+        slow_db_execution: false
+      ],
+      notifiers: [:console_primary]
+    }
+  ]
 
 config :logger, :default_formatter, format: "$time $metadata[$level] $message\n"
 config :logger, level: :debug

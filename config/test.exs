@@ -9,7 +9,7 @@ config :fellowship_api, FellowshipApi.Repo,
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: 10
 
-config :fellowship_api, FellowshipApiWeb.Endpoint,
+config :fellowship_web, FellowshipWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4002],
   secret_key_base: "test-secret-key-base-test-secret-key-base-test-secret-key-base-1234567890",
   server: false

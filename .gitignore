@@ -4,4 +4,4 @@
 *.ez
 .env
 .DS_Store
-qr-check-in.md
+apps/fellowship_api/priv/static/hologram/*

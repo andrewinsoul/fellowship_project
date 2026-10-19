@@ -14,10 +14,11 @@ if config_env() == :prod do
 
   host = System.get_env("PHX_HOST") || "localhost"
 
-  config :fellowship_api, FellowshipApiWeb.Endpoint,
+  config :fellowship_web, FellowshipWeb.Endpoint,
     server: true,
     http: [ip: {0, 0, 0, 0}, port: port],
     url: [host: host, port: 443, scheme: "https"],
     secret_key_base: secret_key_base,
-    check_origin: System.get_env("CHECK_ORIGIN", "//localhost") |> String.split(",")
+    check_origin: System.get_env("CHECK_ORIGIN", "//localhost") |> String.split(","),
+    pubsub_server: FellowshipApi.PubSub
 end
