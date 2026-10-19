@@ -34,23 +34,35 @@ defmodule FellowshipApi.Accounts do
       %Member{status: "active", email: member_email} = member when is_binary(member_email) ->
         token = :crypto.strong_rand_bytes(32) |> Base.url_encode64(padding: false)
         token_hash = :crypto.hash(:sha256, token) |> Base.encode16(case: :lower)
-        expires_at = DateTime.add(DateTime.utc_now(), 30 * 60, :second) |> DateTime.truncate(:second)
+
+        expires_at =
+          DateTime.add(DateTime.utc_now(), 30 * 60, :second) |> DateTime.truncate(:second)
 
         Repo.transaction(fn ->
-          Repo.delete_all(from r in FellowshipApi.Accounts.PasswordResetToken, where: r.member_id == ^member.id)
+          Repo.delete_all(
+            from r in FellowshipApi.Accounts.PasswordResetToken, where: r.member_id == ^member.id
+          )
+
           case %FellowshipApi.Accounts.PasswordResetToken{}
-               |> FellowshipApi.Accounts.PasswordResetToken.changeset(%{member_id: member.id, token_hash: token_hash, expires_at: expires_at})
+               |> FellowshipApi.Accounts.PasswordResetToken.changeset(%{
+                 member_id: member.id,
+                 token_hash: token_hash,
+                 expires_at: expires_at
+               })
                |> Repo.insert() do
             {:ok, _reset} ->
               case FellowshipApi.Mailer.send_password_reset(member_email, token) do
                 :ok -> :ok
                 {:error, reason} -> Repo.rollback(reason)
               end
-            {:error, changeset} -> Repo.rollback(changeset)
+
+            {:error, changeset} ->
+              Repo.rollback(changeset)
           end
         end)
 
-      _ -> :ok
+      _ ->
+        :ok
     end
 
     :ok
@@ -61,21 +73,33 @@ defmodule FellowshipApi.Accounts do
     now = DateTime.utc_now() |> DateTime.truncate(:second)
 
     Repo.transaction(fn ->
-      reset = Repo.one(from r in FellowshipApi.Accounts.PasswordResetToken,
-        where: r.token_hash == ^token_hash and r.expires_at > ^now,
-        lock: "FOR UPDATE")
+      reset =
+        Repo.one(
+          from r in FellowshipApi.Accounts.PasswordResetToken,
+            where: r.token_hash == ^token_hash and r.expires_at > ^now,
+            lock: "FOR UPDATE"
+        )
 
       if reset do
         member = Repo.one!(from m in Member, where: m.id == ^reset.member_id, lock: "FOR UPDATE")
-        changeset = Ecto.Changeset.change(member,
-          password_hash: Bcrypt.hash_pwd_salt(password),
-          token_version: member.token_version + 1)
+
+        changeset =
+          Ecto.Changeset.change(member,
+            password_hash: Bcrypt.hash_pwd_salt(password),
+            token_version: member.token_version + 1
+          )
 
         case Repo.update(changeset) do
           {:ok, _member} ->
-            Repo.delete_all(from r in FellowshipApi.Accounts.PasswordResetToken, where: r.member_id == ^member.id)
+            Repo.delete_all(
+              from r in FellowshipApi.Accounts.PasswordResetToken,
+                where: r.member_id == ^member.id
+            )
+
             :ok
-          {:error, changeset} -> Repo.rollback(changeset)
+
+          {:error, changeset} ->
+            Repo.rollback(changeset)
         end
       else
         Repo.rollback(:invalid_or_expired_token)

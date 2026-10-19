@@ -1,8 +1,8 @@
 defmodule FellowshipWeb.ForgotPasswordPage do
   use Hologram.Page
 
-  route "/forgot-password"
-  layout FellowshipWeb.MainLayout
+  route("/forgot-password")
+  layout(FellowshipWeb.MainLayout)
 
   def init(_params, component, _server) do
     put_state(component, :message, "")
@@ -41,6 +41,7 @@ defmodule FellowshipWeb.ForgotPasswordPage do
     email = event_value(event, :email)
 
     FellowshipApi.Accounts.request_password_reset(email)
+
     put_action(server, :recovery_submitted,
       message: "If an account matches that email address, recovery instructions will be sent."
     )
@@ -50,7 +51,6 @@ defmodule FellowshipWeb.ForgotPasswordPage do
     value = Map.get(event, key, Map.get(event, Atom.to_string(key), ""))
     if is_binary(value), do: value, else: ""
   end
-
 
   def action(:recovery_submitted, params, component) do
     put_state(component, :message, params.message)

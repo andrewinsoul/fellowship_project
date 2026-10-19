@@ -1,7 +1,7 @@
 defmodule FellowshipWeb.ResetPasswordPage do
   use Hologram.Page
-  route "/reset-password"
-  layout FellowshipWeb.MainLayout
+  route("/reset-password")
+  layout(FellowshipWeb.MainLayout)
 
   def init(params, component, _server) do
     component |> put_state(:token, Map.get(params, "token", "")) |> put_state(:message, "")
@@ -39,9 +39,19 @@ defmodule FellowshipWeb.ResetPasswordPage do
     event = Map.get(params, :event, %{})
     token = Map.get(params, :token, Map.get(event, :token, ""))
     password = event_value(event, :password)
+
     case FellowshipApi.Accounts.reset_password(token, password) do
-      {:ok, :ok} -> put_action(server, :reset_result, message: "Password updated. Please sign in again on your devices.", success: true)
-      _ -> put_action(server, :reset_result, message: "This reset link is invalid or expired. Request a new one.", success: false)
+      {:ok, :ok} ->
+        put_action(server, :reset_result,
+          message: "Password updated. Please sign in again on your devices.",
+          success: true
+        )
+
+      _ ->
+        put_action(server, :reset_result,
+          message: "This reset link is invalid or expired. Request a new one.",
+          success: false
+        )
     end
   end
 

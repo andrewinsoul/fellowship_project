@@ -16,7 +16,11 @@ defmodule FellowshipApi.Repo.Migrations.CreateMembers do
       timestamps(type: :utc_datetime)
     end
 
-    create unique_index(:members, ["lower(email)"], name: :members_lower_email_index, where: "email IS NOT NULL")
+    create unique_index(:members, ["lower(email)"],
+             name: :members_lower_email_index,
+             where: "email IS NOT NULL"
+           )
+
     create unique_index(:members, [:phone_number])
     create constraint(:members, :members_gender_check, check: "gender IN ('male', 'female')")
   end

@@ -1,18 +1,24 @@
 defmodule FellowshipWeb.QuotationsPage do
   use Hologram.Page
 
-  route "/quotations"
-  layout FellowshipWeb.MainLayout
-  middleware FellowshipWeb.Middleware.RequireAuth
+  route("/quotations")
+  layout(FellowshipWeb.MainLayout)
+  middleware(FellowshipWeb.Middleware.RequireAuth)
 
   @page_size 20
 
   def init(_params, component, server) do
     member = FellowshipApi.Accounts.get_member(get_session(server, :member_id))
     {quotes, total} = FellowshipApi.Quotations.list_published(1, @page_size)
-    quotes = Enum.map(quotes, fn quote ->
-      %{text: quote.text, source: quote.source || "Scripture", published_date: format_date(quote.published_at)}
-    end)
+
+    quotes =
+      Enum.map(quotes, fn quote ->
+        %{
+          text: quote.text,
+          source: quote.source || "Scripture",
+          published_date: format_date(quote.published_at)
+        }
+      end)
 
     component
     |> put_state(:member_name, member.full_name || "Fellowship member")
@@ -143,11 +149,26 @@ defmodule FellowshipWeb.QuotationsPage do
     """
   end
 
-  def command(:logout, _params, server), do: server |> delete_session(:auth_token) |> delete_session(:member_id) |> put_action(:logged_out)
+  def command(:logout, _params, server),
+    do:
+      server
+      |> delete_session(:auth_token)
+      |> delete_session(:member_id)
+      |> put_action(:logged_out)
+
   def action(:logged_out, _params, component), do: put_page(component, FellowshipWeb.LoginPage)
 
   defp initials(nil), do: "F"
-  defp initials(name), do: name |> String.split() |> Enum.take(2) |> Enum.map(&String.first/1) |> Enum.join() |> String.upcase()
+
+  defp initials(name),
+    do:
+      name
+      |> String.split()
+      |> Enum.take(2)
+      |> Enum.map(&String.first/1)
+      |> Enum.join()
+      |> String.upcase()
+
   defp format_date(nil), do: "Recently published"
   defp format_date(value), do: Calendar.strftime(value, "%d %b %Y")
 end

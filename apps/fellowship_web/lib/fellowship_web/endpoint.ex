@@ -20,7 +20,6 @@ defmodule FellowshipWeb.Endpoint do
   plug Plug.Head
   plug Plug.Session, @session_options
 
-
   plug Plug.Static,
     at: "/",
     from: :fellowship_web,

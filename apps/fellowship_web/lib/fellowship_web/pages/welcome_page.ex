@@ -1,8 +1,8 @@
 defmodule FellowshipWeb.WelcomePage do
   use Hologram.Page
 
-  route "/"
-  layout FellowshipWeb.MainLayout
+  route("/")
+  layout(FellowshipWeb.MainLayout)
 
   def template do
     ~HOLO"""

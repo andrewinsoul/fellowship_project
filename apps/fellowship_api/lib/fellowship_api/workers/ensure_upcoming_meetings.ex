@@ -4,7 +4,6 @@ defmodule FellowshipApi.Workers.EnsureUpcomingMeetings do
 
   @impl Oban.Worker
   def perform(_job) do
-
     today = DateTime.now!("Africa/Lagos") |> DateTime.to_date()
     next_monday = Date.add(Date.beginning_of_week(today, :monday), 7)
 

@@ -1,22 +1,24 @@
 defmodule FellowshipWeb.AttendancePage do
   use Hologram.Page
 
-  route "/attendance"
-  layout FellowshipWeb.MainLayout
-  middleware FellowshipWeb.Middleware.RequireAuth
+  route("/attendance")
+  layout(FellowshipWeb.MainLayout)
+  middleware(FellowshipWeb.Middleware.RequireAuth)
 
   @page_size 20
 
   def init(_params, component, server) do
     member = FellowshipApi.Accounts.get_member(get_session(server, :member_id))
     {records, total} = FellowshipApi.Attendance.list_for_member(member.id, 1, @page_size)
-    records = Enum.map(records, fn record ->
-      %{
-        title: record.meeting.title,
-        meeting_date: format_date(record.meeting.starts_at),
-        checked_in_time: format_datetime(record.checked_in_at)
-      }
-    end)
+
+    records =
+      Enum.map(records, fn record ->
+        %{
+          title: record.meeting.title,
+          meeting_date: format_date(record.meeting.starts_at),
+          checked_in_time: format_datetime(record.checked_in_at)
+        }
+      end)
 
     component
     |> put_state(:member_name, member.full_name || "Fellowship member")
@@ -153,10 +155,20 @@ defmodule FellowshipWeb.AttendancePage do
   def command(:logout, _params, server) do
     server |> delete_session(:auth_token) |> delete_session(:member_id) |> put_action(:logged_out)
   end
+
   def action(:logged_out, _params, component), do: put_page(component, FellowshipWeb.LoginPage)
 
   defp initials(nil), do: "F"
-  defp initials(name), do: name |> String.split() |> Enum.take(2) |> Enum.map(&String.first/1) |> Enum.join() |> String.upcase()
+
+  defp initials(name),
+    do:
+      name
+      |> String.split()
+      |> Enum.take(2)
+      |> Enum.map(&String.first/1)
+      |> Enum.join()
+      |> String.upcase()
+
   defp format_date(nil), do: "Date to be announced"
   defp format_date(value), do: Calendar.strftime(value, "%a, %d %b %Y")
   defp format_datetime(nil), do: "time unavailable"

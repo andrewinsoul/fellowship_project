@@ -6,7 +6,9 @@ defmodule FellowshipApiWeb.AttendanceController do
 
   def check_in(conn, %{"qr_code" => qr_code}) when is_binary(qr_code) do
     case validate_qr_code(qr_code) do
-      :ok -> record_check_in(conn)
+      :ok ->
+        record_check_in(conn)
+
       {:error, :not_configured} ->
         conn
         |> put_status(:service_unavailable)

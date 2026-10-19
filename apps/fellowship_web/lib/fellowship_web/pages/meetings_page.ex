@@ -1,12 +1,13 @@
 defmodule FellowshipWeb.MeetingsPage do
   use Hologram.Page
 
-  route "/meetings"
-  layout FellowshipWeb.MainLayout
-  middleware FellowshipWeb.Middleware.RequireAuth
+  route("/meetings")
+  layout(FellowshipWeb.MainLayout)
+  middleware(FellowshipWeb.Middleware.RequireAuth)
 
   def init(_params, component, server) do
     member = FellowshipApi.Accounts.get_member(get_session(server, :member_id))
+
     meetings =
       FellowshipApi.Meetings.list_upcoming(12)
       |> Enum.map(fn meeting ->
@@ -152,11 +153,26 @@ defmodule FellowshipWeb.MeetingsPage do
     """
   end
 
-  def command(:logout, _params, server), do: server |> delete_session(:auth_token) |> delete_session(:member_id) |> put_action(:logged_out)
+  def command(:logout, _params, server),
+    do:
+      server
+      |> delete_session(:auth_token)
+      |> delete_session(:member_id)
+      |> put_action(:logged_out)
+
   def action(:logged_out, _params, component), do: put_page(component, FellowshipWeb.LoginPage)
 
   defp initials(nil), do: "F"
-  defp initials(name), do: name |> String.split() |> Enum.take(2) |> Enum.map(&String.first/1) |> Enum.join() |> String.upcase()
+
+  defp initials(name),
+    do:
+      name
+      |> String.split()
+      |> Enum.take(2)
+      |> Enum.map(&String.first/1)
+      |> Enum.join()
+      |> String.upcase()
+
   defp format_day(nil), do: "--"
   defp format_day(value), do: Calendar.strftime(value, "%d")
   defp format_month(nil), do: "TBA"

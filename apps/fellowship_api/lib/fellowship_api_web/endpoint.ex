@@ -14,6 +14,7 @@ defmodule FellowshipApiWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
+
   plug Plug.Static,
     at: "/",
     from: :fellowship_api,

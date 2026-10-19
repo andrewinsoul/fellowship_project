@@ -1,9 +1,9 @@
 defmodule FellowshipWeb.HomePage do
   use Hologram.Page
 
-  route "/home"
-  layout FellowshipWeb.MainLayout
-  middleware FellowshipWeb.Middleware.RequireAuth
+  route("/home")
+  layout(FellowshipWeb.MainLayout)
+  middleware(FellowshipWeb.Middleware.RequireAuth)
 
   def init(_params, component, server) do
     member_id = get_session(server, :member_id)
@@ -22,6 +22,7 @@ defmodule FellowshipWeb.HomePage do
 
     member_name = member.full_name || "Fellowship member"
     member_first_name = member_name |> String.split() |> List.first() || "friend"
+
     member_initials =
       member_name
       |> String.split()
@@ -44,11 +45,26 @@ defmodule FellowshipWeb.HomePage do
     |> put_state(:member_initials, member_initials)
     |> put_state(:greeting, greeting)
     |> put_state(:member_email, member.email)
-    |> put_state(:meeting_title, if(meeting, do: meeting.title, else: "No upcoming meeting scheduled"))
-    |> put_state(:meeting_time, if(meeting, do: DateTime.to_string(meeting.starts_at), else: "Check back for the next scheduled fellowship"))
+    |> put_state(
+      :meeting_title,
+      if(meeting, do: meeting.title, else: "No upcoming meeting scheduled")
+    )
+    |> put_state(
+      :meeting_time,
+      if(meeting,
+        do: DateTime.to_string(meeting.starts_at),
+        else: "Check back for the next scheduled fellowship"
+      )
+    )
     |> put_state(:check_in_status, check_in_status(current_meeting, checked_in))
-    |> put_state(:quotation_text, if(quotation, do: quotation.text, else: "No quotation is available right now."))
-    |> put_state(:quotation_source, if(quotation && quotation.source, do: quotation.source, else: "FGBMFI Connect"))
+    |> put_state(
+      :quotation_text,
+      if(quotation, do: quotation.text, else: "No quotation is available right now.")
+    )
+    |> put_state(
+      :quotation_source,
+      if(quotation && quotation.source, do: quotation.source, else: "FGBMFI Connect")
+    )
   end
 
   def template do
@@ -259,6 +275,9 @@ defmodule FellowshipWeb.HomePage do
   end
 
   defp check_in_status(nil, _checked_in), do: "Check-in is currently closed."
-  defp check_in_status(_meeting, true), do: "You are already checked in for the current fellowship."
+
+  defp check_in_status(_meeting, true),
+    do: "You are already checked in for the current fellowship."
+
   defp check_in_status(_meeting, false), do: "Check-in is open for the current fellowship."
 end

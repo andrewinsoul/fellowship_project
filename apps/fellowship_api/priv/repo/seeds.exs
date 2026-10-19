@@ -1,4 +1,3 @@
-
 import Ecto.Query
 
 alias FellowshipApi.Repo
@@ -46,8 +45,8 @@ end
 entries = String.split(entries_output, "\n", trim: true)
 
 vpl_entry =
-  Enum.find(entries, &(String.ends_with?(String.downcase(&1), ".vpl"))) ||
-    Enum.find(entries, &(String.ends_with?(String.downcase(&1), ".txt")))
+  Enum.find(entries, &String.ends_with?(String.downcase(&1), ".vpl")) ||
+    Enum.find(entries, &String.ends_with?(String.downcase(&1), ".txt"))
 
 if is_nil(vpl_entry) do
   raise """
@@ -95,7 +94,6 @@ book_count =
   end)
   |> Enum.uniq()
   |> length()
-
 
 if book_count != 66 or length(verses) < 30_000 do
   raise """

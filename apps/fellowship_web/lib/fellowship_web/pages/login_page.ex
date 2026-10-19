@@ -1,9 +1,9 @@
 defmodule FellowshipWeb.LoginPage do
   use Hologram.Page
 
-  route "/login"
-  layout FellowshipWeb.MainLayout
-  middleware FellowshipWeb.Middleware.RedirectIfAuthenticated
+  route("/login")
+  layout(FellowshipWeb.MainLayout)
+  middleware(FellowshipWeb.Middleware.RedirectIfAuthenticated)
 
   def init(_params, component, _server) do
     component
@@ -64,10 +64,16 @@ defmodule FellowshipWeb.LoginPage do
         server
         |> put_session(:auth_token, token)
         |> put_session(:member_id, member.id)
-        |> put_action(:auth_result, message: "You're signed in successfully. Your account session is ready.", success: true)
+        |> put_action(:auth_result,
+          message: "You're signed in successfully. Your account session is ready.",
+          success: true
+        )
 
       {:error, _reason} ->
-        put_action(server, :auth_result, message: "The details provided could not be verified.", success: false)
+        put_action(server, :auth_result,
+          message: "The details provided could not be verified.",
+          success: false
+        )
     end
   end
 
