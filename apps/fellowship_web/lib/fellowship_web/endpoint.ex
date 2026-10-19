@@ -27,7 +27,6 @@ defmodule FellowshipWeb.Endpoint do
     gzip: false,
     only: ~w(hologram)
 
-  # The existing CSS, images, manifest, and service worker belong to the API app.
   plug Plug.Static,
     at: "/",
     from: :fellowship_api,

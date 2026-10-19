@@ -4,9 +4,7 @@ defmodule FellowshipApi.Workers.EnsureUpcomingMeetings do
 
   @impl Oban.Worker
   def perform(_job) do
-    # Keep a rolling 12-week window of Monday occurrences. This makes the
-    # schedule resilient to a missed weekly job and keeps meetings available
-    # for reminders well ahead of time.
+
     today = DateTime.now!("Africa/Lagos") |> DateTime.to_date()
     next_monday = Date.add(Date.beginning_of_week(today, :monday), 7)
 

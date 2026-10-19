@@ -4,12 +4,6 @@ import Ecto.Query
 alias FellowshipApi.Repo
 alias FellowshipApi.Quotations.Quotation
 
-# The World English Bible British Edition (WEBBE) is public domain and
-# contains the Protestant 66-book canon.
-#
-# The archive is downloaded only when seeding. The running application
-# reads verses from PostgreSQL and does not call an external Bible API.
-
 archive_dir =
   :fellowship_api
   |> :code.priv_dir()
@@ -68,7 +62,6 @@ verses =
   vpl_text
   |> String.split("\n", trim: true)
   |> Enum.reduce([], fn line, acc ->
-    # VPL lines have the form: Genesis 1:1 Verse text
     case Regex.run(
            ~r/^(.+?)\s+(\d+):(\d+)\s+(.+)$/,
            String.trim(line)
@@ -103,7 +96,7 @@ book_count =
   |> Enum.uniq()
   |> length()
 
-# Fail loudly rather than silently importing incomplete data.
+
 if book_count != 66 or length(verses) < 30_000 do
   raise """
   Expected the complete 66-book Bible (at least 30,000 verses).
@@ -112,11 +105,8 @@ if book_count != 66 or length(verses) < 30_000 do
   """
 end
 
-# Use DateTime because the schema expects :utc_datetime fields.
 now = DateTime.utc_now() |> DateTime.truncate(:second)
 
-# Find existing quotation references so rerunning this seed does not
-# delete existing quotations or reinsert Bible verses.
 existing_sources =
   Repo.all(
     from q in Quotation,
