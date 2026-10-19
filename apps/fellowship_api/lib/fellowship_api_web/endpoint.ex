@@ -20,6 +20,5 @@ defmodule FellowshipApiWeb.Endpoint do
     gzip: false,
     only: ~w(assets hologram images icon.svg manifest.webmanifest sw.js)
 
-  plug Hologram.Router
   plug FellowshipApiWeb.Router
 end

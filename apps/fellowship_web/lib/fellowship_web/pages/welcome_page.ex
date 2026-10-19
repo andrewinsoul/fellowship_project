@@ -10,7 +10,7 @@ defmodule FellowshipWeb.WelcomePage do
       <section class="welcome-panel">
         <div class="welcome-art">
           <div class="sun-glow"></div>
-          <div class="cross-art" aria-hidden="true">✝</div>
+          <FellowshipWeb.IconTile cid="welcome_cross" symbol="✝" class_name="cross-art" label="Cross" />
           <div class="welcome-copy">
             <p class="eyebrow light">FGBMFI CONNECT</p>
             <h1>Faith. Fellowship. Purpose.</h1>
@@ -25,8 +25,8 @@ defmodule FellowshipWeb.WelcomePage do
           <h2>FGBMFI Connect</h2>
           <p>One place for your fellowship activities.</p>
           <div class="form-stack">
-            <a class="button primary full" href="/login">Sign in</a>
-            <a class="button secondary full" href="/register">Create an account</a>
+            <FellowshipWeb.Button cid="welcome_sign_in" href="/login" class_name="full">Sign in</FellowshipWeb.Button>
+            <FellowshipWeb.Button cid="welcome_register" href="/register" variant="secondary" class_name="full">Create an account</FellowshipWeb.Button>
           </div>
           <p class="fineprint">A community of faith, fellowship, and service.</p>
         </div>

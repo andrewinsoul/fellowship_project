@@ -3,6 +3,7 @@ defmodule FellowshipWeb.LoginPage do
 
   route "/login"
   layout FellowshipWeb.MainLayout
+  middleware FellowshipWeb.Middleware.RedirectIfAuthenticated
 
   def init(_params, component, _server) do
     component
@@ -13,25 +14,39 @@ defmodule FellowshipWeb.LoginPage do
   def template do
     ~HOLO"""
     <main class="auth-shell">
-      <header class="auth-brand">
-        <div class="brand-mark"><span>✝</span><i>●</i><i>●</i></div>
-        <div><strong>FGBMFI <span>Connect</span></strong><small>Connected in fellowship. Growing in faith.</small></div>
-      </header>
+      <FellowshipWeb.BrandMark cid="login_brand" />
       <section class="auth-card">
-          <p class="eyebrow">YOUR COMMUNITY AWAITS</p>
-          <h2>Sign in</h2>
-          <p>Use your email address or phone number.</p>
-          <form class="form-stack" $submit={command: :login}>
-            <label> Email or phone number
-              <input type="text" name="login" autocomplete="username" required />
-            </label>
-            <FellowshipWeb.PasswordInput cid="login_password" label="Password" name="password" autocomplete="current-password" required={true} minlength={0} />
-            <p class="auth-message {@message_type}">{@message}</p>
-            <button class="button primary full" type="submit">Sign in</button>
-          </form>
-          <p class="auth-switch">Don't have an account? <a href="/register">Create an account</a></p>
-          <p class="auth-switch"><a href="/forgot-password">Forgot your password?</a></p>
-          <p class="fineprint">A community of faith, fellowship, and service.</p>
+        <p class="eyebrow">YOUR COMMUNITY AWAITS</p>
+        <h2>Sign in</h2>
+        <p>Use your email address or phone number.</p>
+        <form class="form-stack" $submit={command: :login}>
+          <FellowshipWeb.Input
+            cid="login_identifier"
+            name="login"
+            label="Email or phone number"
+            type="text"
+            autocomplete="username"
+            required={true}
+          />
+          <FellowshipWeb.PasswordInput
+            cid="login_password"
+            label="Password"
+            name="password"
+            autocomplete="current-password"
+            required={true}
+            minlength={0}
+          />
+          <p class="auth-message {@message_type}">{@message}</p>
+          <FellowshipWeb.Button cid="login_submit" type="submit" class_name="full">Sign in</FellowshipWeb.Button>
+        </form>
+        <p class="auth-switch">
+          Don't have an account?
+          <a href="/register">Create an account</a>
+        </p>
+        <p class="auth-switch">
+          <a href="/forgot-password">Forgot your password?</a>
+        </p>
+        <p class="fineprint">A community of faith, fellowship, and service.</p>
       </section>
     </main>
     """

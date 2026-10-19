@@ -16,6 +16,11 @@
 
 .dockerignore
 
+# Never send local secrets to the Docker build context.
+.env
+.env.*
+!.env.example
+
 # Ignore git, but keep git HEAD and refs to access current commit hash if needed:
 #
 # $ cat .git/HEAD | awk '{print ".git/"$2}' | xargs cat

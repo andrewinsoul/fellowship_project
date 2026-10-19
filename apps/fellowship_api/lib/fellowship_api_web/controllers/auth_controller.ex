@@ -101,8 +101,7 @@ defmodule FellowshipApiWeb.AuthController do
     conn |> put_status(:unprocessable_entity) |> json(%{error: %{code: "invalid_reset_request", message: "Provide a valid reset token and a password of at least 8 characters."}})
   end
 
-  def issue_token(member),
-    do: Phoenix.Token.sign(FellowshipApiWeb.Endpoint, "member auth", %{id: member.id, token_version: member.token_version || 0})
+  def issue_token(member), do: FellowshipApi.AuthToken.sign(member)
 
   def member_json(member) do
     %{

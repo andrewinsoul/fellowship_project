@@ -259,7 +259,8 @@ p {
   max-width: 330px;
 }
 .auth-card {
-  width: min(100%, 430px);
+  
+  /* width: 100%; */
   padding: 32px;
   background: white;
   border: 1px solid #eee9f5;
@@ -1240,8 +1241,11 @@ button {
   .register-card {
     max-height: none;
   }
+  .auth-card {
+    width: min(100%, 430px);
+  }
 }
-/* Keep authentication branding aligned with the Next.js reference. */
+
 .auth-brand .brand-mark {
   flex: 0 0 52px;
   width: 52px;
@@ -1357,7 +1361,7 @@ body.qr-modal-open {
   }
 }
 
-/* Keep the Hologram home page aligned with the original Next.js dashboard. */
+
 .sidebar .brand {
   padding-bottom: 32px;
 }
@@ -1401,6 +1405,10 @@ body.qr-modal-open {
 .meeting-card .meeting-row {
   min-height: 86px;
 }
+#register-id {
+  width: 30%;
+  min-width: 450px;
+}
 @media (max-width: 1050px) {
   .sidebar {
     width: 220px;
@@ -1418,7 +1426,6 @@ body.qr-modal-open {
   }
 }
 
-/* Member pages ported from the Next.js application. */
 .page-content {
   display: grid;
   gap: 22px;
@@ -1476,5 +1483,8 @@ body.qr-modal-open {
   }
   .meeting-list-row {
     align-items: flex-start;
+  }
+  #register-id {
+    width: 100%;
   }
 }

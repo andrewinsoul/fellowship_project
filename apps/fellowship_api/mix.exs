@@ -6,7 +6,6 @@ defmodule FellowshipApi.MixProject do
       app: :fellowship_api,
       version: "0.1.0",
       elixir: "~> 1.19",
-      compilers: Mix.compilers() ++ [:hologram],
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
@@ -27,8 +26,6 @@ defmodule FellowshipApi.MixProject do
   defp deps do
     [
       {:phoenix, "~> 1.7.21"},
-      {:hologram, "~> 0.12.0"},
-      {:fellowship_web, in_umbrella: true},
       {:phoenix_pubsub, "~> 2.1"},
       {:phoenix_ecto, "~> 4.6"},
       {:ecto_sql, "~> 3.12"},

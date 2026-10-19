@@ -4,7 +4,9 @@ config :fellowship_api,
   ecto_repos: [FellowshipApi.Repo],
   generators: [timestamp_type: :utc_datetime]
 
-config :fellowship_api, FellowshipApiWeb.Endpoint,
+
+
+config :fellowship_web, FellowshipWeb.Endpoint,
   url: [host: "localhost"],
   adapter: Bandit.PhoenixAdapter,
   render_errors: [formats: [json: FellowshipApiWeb.ErrorJSON], layout: false],

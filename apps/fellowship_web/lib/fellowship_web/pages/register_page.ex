@@ -13,40 +13,71 @@ defmodule FellowshipWeb.RegisterPage do
   def template do
     ~HOLO"""
     <main class="auth-shell">
-      <header class="auth-brand">
-        <div class="brand-mark"><span>✝</span><i>●</i><i>●</i></div>
-        <div><strong>FGBMFI <span>Connect</span></strong><small>Connected in fellowship. Growing in faith.</small></div>
-      </header>
-      <section class="auth-card register-card">
-          <p class="eyebrow">JOIN THE COMMUNITY</p>
-          <h2>Create an account</h2>
-          <p>Enter your details to get started.</p>
-          <form class="form-stack" $submit={command: :register, params: %{}} novalidate>
-            <label> Full name
-              <input type="text" name="full_name" autocomplete="name" required minlength="2" />
-            </label>
-            <label> Email address
-              <input type="email" required name="email" autocomplete="email" />
-            </label>
-            <label> Phone number
-              <input type="tel" name="phone_number" autocomplete="tel" required minlength="7" />
-            </label>
-            <label> Gender
-              <select name="gender" required>
-                <option value="">Select gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-              </select>
-            </label>
-            <label> Residence address
-              <input type="text" name="residence_address" autocomplete="street-address" required />
-            </label>
-            <FellowshipWeb.PasswordInput cid="register_password" label="Password" name="password" autocomplete="new-password" required={true} minlength={8} />
-            <p class="auth-message {@message_type}" role="status" aria-live="polite">{@message}</p>
-            <button class="button primary full" type="submit">Create account</button>
-          </form>
-          <p class="auth-switch">Already have an account? <a href="/login">Sign in</a></p>
-          <p class="fineprint">A community of faith, fellowship, and service.</p>
+    <FellowshipWeb.BrandMark cid="register_brand" />
+      <section class="auth-card register-card" id="register-id">
+        <p class="eyebrow">JOIN THE COMMUNITY</p>
+        <h2>Create an account</h2>
+        <p>Enter your details to get started.</p>
+        <form class="form-stack" $submit={command: :register, params: %{}} novalidate>
+          <FellowshipWeb.Input
+            cid="register_full_name"
+            name="full_name"
+            label="Full name"
+            type="text"
+            autocomplete="name"
+            required={true}
+            minlength={2}
+          />
+          <FellowshipWeb.Input
+            cid="register_email"
+            name="email"
+            label="Email address"
+            type="email"
+            autocomplete="email"
+            required={true}
+          />
+          <FellowshipWeb.PasswordInput
+            cid="register_password"
+            label="Password"
+            name="password"
+            autocomplete="new-password"
+            required={true}
+            minlength={8}
+          />
+          <FellowshipWeb.Input
+            cid="register_phone"
+            placeholder="08012345678"
+            name="phone_number"
+            label="Phone number"
+            type="tel"
+
+            autocomplete="tel"
+            required={true}
+            minlength={7}
+          />
+          <FellowshipWeb.Select cid="register_gender" name="gender" label="Gender" required={true}>
+            <option value="">Select gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </FellowshipWeb.Select>
+          <FellowshipWeb.Input
+            cid="register_address"
+            name="residence_address"
+            label="Residence address"
+            type="text"
+            autocomplete="street-address"
+            required={true}
+          />
+          <p class="auth-message {@message_type}" role="status" aria-live="polite">
+            {@message}
+          </p>
+          <FellowshipWeb.Button cid="register_submit" type="submit" class_name="full">Create account</FellowshipWeb.Button>
+        </form>
+        <p class="auth-switch">
+          Already have an account?
+          <a href="/login">Sign in</a>
+        </p>
+        <p class="fineprint">A community of faith, fellowship, and service.</p>
       </section>
     </main>
     """

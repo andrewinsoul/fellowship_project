@@ -7,7 +7,16 @@ defmodule FellowshipUmbrella.MixProject do
       version: "0.1.0",
       start_permanent: Mix.env() == :prod,
       deps: [],
-      aliases: aliases()
+      aliases: aliases(),
+      releases: [
+        fellowship_api: [
+          applications: [
+            fellowship_api: :permanent,
+            fellowship_web: :permanent
+          ],
+          overlays: ["apps/fellowship_api/rel/overlays"]
+        ]
+      ]
     ]
   end
 

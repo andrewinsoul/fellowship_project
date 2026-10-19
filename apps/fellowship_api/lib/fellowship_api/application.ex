@@ -8,16 +8,14 @@ defmodule FellowshipApi.Application do
       FellowshipApi.Repo,
       {Phoenix.PubSub, name: FellowshipApi.PubSub},
       {Oban, Application.fetch_env!(:fellowship_api, Oban)},
-      {NatureWhistle.Supervisor, []},
-      FellowshipApiWeb.Endpoint
+      {NatureWhistle.Supervisor, []}
     ]
 
     Supervisor.start_link(children, strategy: :one_for_one, name: FellowshipApi.Supervisor)
   end
 
   @impl true
-  def config_change(changed, _new, removed) do
-    FellowshipApiWeb.Endpoint.config_change(changed, removed)
+  def config_change(_changed, _new, _removed) do
     :ok
   end
 end

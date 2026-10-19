@@ -11,22 +11,26 @@ defmodule FellowshipWeb.ForgotPasswordPage do
   def template do
     ~HOLO"""
     <main class="auth-shell">
-      <header class="auth-brand">
-        <div class="brand-mark"><span>✝</span><i>●</i><i>●</i></div>
-        <div><strong>FGBMFI <span>Connect</span></strong><small>Connected in fellowship. Growing in faith.</small></div>
-      </header>
+      <FellowshipWeb.BrandMark cid="forgot_password_brand" />
       <section class="auth-card">
         <p class="eyebrow">ACCOUNT RECOVERY</p>
         <h1>Forgot your password?</h1>
         <p>Enter the email address associated with your account.</p>
         <form class="form-stack" $submit={command: :forgot_password}>
-          <label> Email address
-            <input type="email" name="email" autocomplete="email" required />
-          </label>
+          <FellowshipWeb.Input
+            cid="recovery_email"
+            name="email"
+            label="Email address"
+            type="email"
+            autocomplete="email"
+            required={true}
+          />
           <p class="auth-message">{@message}</p>
-          <button class="button primary full" type="submit">Continue</button>
+          <FellowshipWeb.Button cid="forgot_password_submit" type="submit" class_name="full">Continue</FellowshipWeb.Button>
         </form>
-        <p class="auth-switch"><a href="/login">Back to sign in</a></p>
+        <p class="auth-switch">
+          <a href="/login">Back to sign in</a>
+        </p>
       </section>
     </main>
     """

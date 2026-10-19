@@ -56,25 +56,56 @@ defmodule FellowshipWeb.HomePage do
     <div class="app-shell">
       <aside class="sidebar">
         <div class="brand">
-          <div class="brand-mark small"><span>✝</span><i>●</i><i>●</i></div>
-          <div><b>FGBMFI</b><small>Connect</small></div>
+          <div class="brand-mark small">
+            <span>✝</span>
+            <i>●</i>
+            <i>●</i>
+          </div>
+          <div>
+            <b>FGBMFI</b>
+            <small>Connect</small>
+          </div>
         </div>
         <p class="chapter-label">YOUR FELLOWSHIP</p>
         <nav>
-          <a class="nav-item active" href="/home"><span class="nav-icon">⌂</span> Home</a>
-          <a class="nav-item" href="/attendance"><span class="nav-icon">▦</span> Attendance</a>
-          <a class="nav-item" href="/quotations"><span class="nav-icon">▤</span> Scripture</a>
-          <a class="nav-item" href="/profile"><span class="nav-icon">○</span> Profile</a>
-          <a class="nav-item" href="/meetings"><span class="nav-icon">◷</span> Meetings</a>
-          <a class="nav-item" href="/settings"><span class="nav-icon">⚙</span> Preferences</a>
+          <a class="nav-item active" href="/home">
+            <span class="nav-icon">⌂</span>
+            Home
+          </a>
+          <a class="nav-item" href="/attendance">
+            <span class="nav-icon">▦</span>
+            Attendance
+          </a>
+          <a class="nav-item" href="/quotations">
+            <span class="nav-icon">▤</span>
+            Scripture
+          </a>
+          <a class="nav-item" href="/profile">
+            <span class="nav-icon">○</span>
+            Profile
+          </a>
+          <a class="nav-item" href="/meetings">
+            <span class="nav-icon">◷</span>
+            Meetings
+          </a>
+          <a class="nav-item" href="/settings">
+            <span class="nav-icon">⚙</span>
+            Preferences
+          </a>
         </nav>
         <div class="sidebar-bottom">
           <div class="mini-member">
             <div class="avatar">{@member_initials}</div>
-            <div><b>{@member_name}</b><small>Member</small></div>
+            <div>
+              <b>{@member_name}</b>
+              <small>Member</small>
+            </div>
           </div>
           <form $submit={command: :logout}>
-            <button class="nav-item logout" type="submit"><span class="nav-icon">↪</span> Sign out</button>
+            <button class="nav-item logout" type="submit">
+              <span class="nav-icon">↪</span>
+              Sign out
+            </button>
           </form>
         </div>
       </aside>
@@ -98,7 +129,10 @@ defmodule FellowshipWeb.HomePage do
           </section>
 
           <section class="card meeting-card">
-            <div class="card-kicker">UP NEXT <span class="status-pill">Coming soon</span></div>
+            <div class="card-kicker">
+              UP NEXT
+              <span class="status-pill">Coming soon</span>
+            </div>
             <div class="meeting-row">
               <div class="icon-tile">▦</div>
               <div class="meeting-info">
@@ -107,11 +141,17 @@ defmodule FellowshipWeb.HomePage do
                 <small>{@meeting_time}</small>
               </div>
             </div>
-            <button class="button primary full" type="button" data-qr-open><span aria-hidden="true">▦</span> Scan QR to Check In</button>
+            <button class="button primary full" type="button" data-qr-open>
+              <span aria-hidden="true">▦</span>
+              Scan QR to Check In
+            </button>
           </section>
 
           <section class="card scripture-card">
-            <div class="card-kicker">SCRIPTURE FOR THE SOUL <span>✦</span></div>
+            <div class="card-kicker">
+              SCRIPTURE FOR THE SOUL
+              <span>✦</span>
+            </div>
             <blockquote>“{@quotation_text}”</blockquote>
             <div class="quote-source">{@quotation_source}</div>
             <a class="text-button scripture-link" href="/quotations">Explore scripture →</a>
@@ -120,10 +160,26 @@ defmodule FellowshipWeb.HomePage do
           <section class="card quick-card">
             <div class="card-kicker">QUICK ACCESS</div>
             <div class="quick-grid">
-              <a href="/attendance"><span>▦</span><b>My attendance</b><small>View your history</small></a>
-              <a href="/quotations"><span>▤</span><b>Scripture</b><small>Read and reflect</small></a>
-              <a href="/settings"><span>♧</span><b>Reminders</b><small>Manage preferences</small></a>
-              <a href="/profile"><span>○</span><b>My profile</b><small>Your information</small></a>
+              <a href="/attendance">
+                <span>▦</span>
+                <b>My attendance</b>
+                <small>View your history</small>
+              </a>
+              <a href="/quotations">
+                <span>▤</span>
+                <b>Scripture</b>
+                <small>Read and reflect</small>
+              </a>
+              <a href="/settings">
+                <span>♧</span>
+                <b>Reminders</b>
+                <small>Manage preferences</small>
+              </a>
+              <a href="/profile">
+                <span>○</span>
+                <b>My profile</b>
+                <small>Your information</small>
+              </a>
             </div>
           </section>
 
@@ -140,18 +196,44 @@ defmodule FellowshipWeb.HomePage do
       </main>
 
       <nav class="mobile-nav" aria-label="Mobile navigation">
-        <a class="active" href="/home" aria-current="page"><span aria-hidden="true">⌂</span><small>Home</small></a>
-        <a href="/attendance"><span aria-hidden="true">▦</span><small>Attendance</small></a>
-        <a href="/quotations"><span aria-hidden="true">▤</span><small>Scripture</small></a>
-        <a href="/profile"><span aria-hidden="true">○</span><small>Profile</small></a>
+        <a class="active" href="/home" aria-current="page">
+          <span aria-hidden="true">⌂</span>
+          <small>Home</small>
+        </a>
+        <a href="/attendance">
+          <span aria-hidden="true">▦</span>
+          <small>Attendance</small>
+        </a>
+        <a href="/quotations">
+          <span aria-hidden="true">▤</span>
+          <small>Scripture</small>
+        </a>
+        <a href="/profile">
+          <span aria-hidden="true">○</span>
+          <small>Profile</small>
+        </a>
       </nav>
 
-      <section id="qr-scan-modal" class="qr-modal" hidden
-        data-auth-token="{@auth_token}" aria-hidden="true" role="dialog"
-        aria-modal="true" aria-labelledby="qr-modal-title">
+      <section
+        id="qr-scan-modal"
+        class="qr-modal"
+        hidden
+        data-auth-token="{@auth_token}"
+        aria-hidden="true"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="qr-modal-title"
+      >
         <div class="qr-modal-backdrop" data-qr-close></div>
         <div class="qr-modal-card">
-          <button class="qr-modal-close" type="button" data-qr-close aria-label="Close scanner">×</button>
+          <button
+            class="qr-modal-close"
+            type="button"
+            data-qr-close
+            aria-label="Close scanner"
+          >
+            ×
+          </button>
           <p class="eyebrow">FELLOWSHIP ATTENDANCE</p>
           <h2 id="qr-modal-title">Scan meeting QR code</h2>
           <p class="qr-modal-description">Scan the official QR code displayed at your fellowship meeting.</p>

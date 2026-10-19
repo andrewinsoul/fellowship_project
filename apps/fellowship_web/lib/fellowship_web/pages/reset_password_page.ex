@@ -10,12 +10,26 @@ defmodule FellowshipWeb.ResetPasswordPage do
   def template do
     ~HOLO"""
     <main class="auth-shell">
-      <header class="auth-brand"><div class="brand-mark"><span>✝</span><i>●</i><i>●</i></div><div><strong>FGBMFI <span>Connect</span></strong><small>Connected in fellowship. Growing in faith.</small></div></header>
-      <section class="auth-card"><p class="eyebrow">ACCOUNT RECOVERY</p><h1>Choose a new password</h1><p>Use at least 8 characters. This reset link can only be used once.</p>
+      <FellowshipWeb.BrandMark cid="reset_password_brand" />
+      <section class="auth-card">
+        <p class="eyebrow">ACCOUNT RECOVERY</p>
+        <h1>Choose a new password</h1>
+        <p>Use at least 8 characters. This reset link can only be used once.</p>
         <form class="form-stack" $submit={command: :reset_password}>
-          <FellowshipWeb.PasswordInput cid="reset_password" label="New password" name="password" autocomplete="new-password" required={true} minlength={8} />
-          <p class="auth-message">{@message}</p><button class="button primary full" type="submit">Reset password</button>
-        </form><p class="auth-switch"><a href="/login">Back to sign in</a></p>
+          <FellowshipWeb.PasswordInput
+            cid="reset_password"
+            label="New password"
+            name="password"
+            autocomplete="new-password"
+            required={true}
+            minlength={8}
+          />
+          <p class="auth-message">{@message}</p>
+          <FellowshipWeb.Button cid="reset_password_submit" type="submit" class_name="full">Reset password</FellowshipWeb.Button>
+        </form>
+        <p class="auth-switch">
+          <a href="/login">Back to sign in</a>
+        </p>
       </section>
     </main>
     """
