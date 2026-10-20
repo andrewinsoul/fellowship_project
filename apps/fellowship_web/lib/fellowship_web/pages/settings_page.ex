@@ -1,5 +1,6 @@
 defmodule FellowshipWeb.SettingsPage do
   use Hologram.Page
+  alias FellowshipWeb.{Checkbox, Select, Button}
 
   route("/settings")
   layout(FellowshipWeb.MainLayout)
@@ -98,7 +99,7 @@ defmodule FellowshipWeb.SettingsPage do
               <div class="notice {@message_type}">{@message}</div>
             {/if}
             <form class="form-stack" $submit={action: :submit_save_preferences}>
-              <FellowshipWeb.Checkbox
+              <Checkbox
                 cid="push_notifications"
                 class_name="toggle-row"
                 name="push_enabled"
@@ -106,8 +107,8 @@ defmodule FellowshipWeb.SettingsPage do
               >
                 <b>Push notifications</b>
                 <small>Receive updates on this device when supported.</small>
-              </FellowshipWeb.Checkbox>
-              <FellowshipWeb.Checkbox
+              </Checkbox>
+              <Checkbox
                 cid="email_notifications"
                 class_name="toggle-row"
                 name="email_enabled"
@@ -115,17 +116,17 @@ defmodule FellowshipWeb.SettingsPage do
               >
                 <b>Email notifications</b>
                 <small>Receive fellowship updates by email.</small>
-              </FellowshipWeb.Checkbox>
-              <FellowshipWeb.Select cid="reminder_timing" name="reminder_minutes" label="Reminder timing">
+              </Checkbox>
+              <Select cid="reminder_timing" name="reminder_minutes" label="Reminder timing">
                 <option value="0" selected={@reminder_minutes == 0}>No advance reminder</option>
                 <option value="15" selected={@reminder_minutes == 15}>15 minutes before</option>
                 <option value="30" selected={@reminder_minutes == 30}>30 minutes before</option>
                 <option value="60" selected={@reminder_minutes == 60}>1 hour before</option>
                 <option value="120" selected={@reminder_minutes == 120}>2 hours before</option>
                 <option value="1440" selected={@reminder_minutes == 1440}>1 day before</option>
-              </FellowshipWeb.Select>
+              </Select>
               <div class="form-actions">
-                <FellowshipWeb.Button cid="settings_save" type="submit" loading={@loading}>Save preferences</FellowshipWeb.Button>
+                <Button cid="settings_save" type="submit" loading={@loading}>Save preferences</Button>
               </div>
             </form>
             <p class="muted settings-note">

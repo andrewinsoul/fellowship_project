@@ -1,5 +1,6 @@
 defmodule FellowshipWeb.QuotationsPage do
   use Hologram.Page
+  alias FellowshipWeb.{LoginPage, Card}
 
   route("/quotations")
   layout(FellowshipWeb.MainLayout)
@@ -102,10 +103,10 @@ defmodule FellowshipWeb.QuotationsPage do
             </div>
           </section>
           {%if @quotes == []}
-            <FellowshipWeb.Card cid="quotations_empty" class_name="empty-state">
+            <Card cid="quotations_empty" class_name="empty-state">
               <h3>No published scripture yet</h3>
               <p>Published quotations will appear here.</p>
-            </FellowshipWeb.Card>
+            </Card>
           {%else}
             <div class="quotes-grid">
               {%for quote <- @quotes}
@@ -156,7 +157,7 @@ defmodule FellowshipWeb.QuotationsPage do
       |> delete_session(:member_id)
       |> put_action(:logged_out)
 
-  def action(:logged_out, _params, component), do: put_page(component, FellowshipWeb.LoginPage)
+  def action(:logged_out, _params, component), do: put_page(component, LoginPage)
 
   defp initials(nil), do: "F"
 

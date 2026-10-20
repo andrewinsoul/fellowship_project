@@ -1,5 +1,6 @@
 defmodule FellowshipWeb.RegisterPage do
   use Hologram.Page
+  alias FellowshipWeb.{BrandMark, Button, Input, PasswordInput, Select, HomePage}
 
   route("/register")
   layout(FellowshipWeb.MainLayout)
@@ -14,13 +15,13 @@ defmodule FellowshipWeb.RegisterPage do
   def template do
     ~HOLO"""
     <main class="auth-shell">
-    <FellowshipWeb.BrandMark cid="register_brand" />
+    <BrandMark cid="register_brand" />
       <section class="auth-card register-card" id="register-id">
         <p class="eyebrow">JOIN THE COMMUNITY</p>
         <h2>Create an account</h2>
         <p>Enter your details to get started.</p>
         <form class="form-stack" $submit={action: :submit_register} novalidate>
-          <FellowshipWeb.Input
+          <Input
             cid="register_full_name"
             name="full_name"
             label="Full name"
@@ -29,7 +30,7 @@ defmodule FellowshipWeb.RegisterPage do
             required={true}
             minlength={2}
           />
-          <FellowshipWeb.Input
+          <Input
             cid="register_email"
             name="email"
             label="Email address"
@@ -37,7 +38,7 @@ defmodule FellowshipWeb.RegisterPage do
             autocomplete="email"
             required={true}
           />
-          <FellowshipWeb.PasswordInput
+          <PasswordInput
             cid="register_password"
             label="Password"
             name="password"
@@ -45,7 +46,7 @@ defmodule FellowshipWeb.RegisterPage do
             required={true}
             minlength={8}
           />
-          <FellowshipWeb.Input
+          <Input
             cid="register_phone"
             placeholder="08012345678"
             name="phone_number"
@@ -56,12 +57,12 @@ defmodule FellowshipWeb.RegisterPage do
             required={true}
             minlength={7}
           />
-          <FellowshipWeb.Select cid="register_gender" name="gender" label="Gender" required={true}>
+          <Select cid="register_gender" name="gender" label="Gender" required={true}>
             <option value="">Select gender</option>
             <option value="male">Male</option>
             <option value="female">Female</option>
-          </FellowshipWeb.Select>
-          <FellowshipWeb.Input
+          </Select>
+          <Input
             cid="register_address"
             name="residence_address"
             label="Residence address"
@@ -72,7 +73,7 @@ defmodule FellowshipWeb.RegisterPage do
           <p class="auth-message {@message_type}" role="status" aria-live="polite">
             {@message}
           </p>
-          <FellowshipWeb.Button cid="register_submit" type="submit" class_name="full" loading={@loading}>Create account</FellowshipWeb.Button>
+          <Button cid="register_submit" type="submit" class_name="full" loading={@loading}>Create account</Button>
         </form>
         <p class="auth-switch">
           Already have an account?
@@ -94,7 +95,7 @@ defmodule FellowshipWeb.RegisterPage do
     if params.success do
       component
       |> put_state(:loading, false)
-      |> put_page(FellowshipWeb.HomePage)
+      |> put_page(HomePage)
     else
       component
       |> put_state(:loading, false)

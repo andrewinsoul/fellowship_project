@@ -1,5 +1,7 @@
 defmodule FellowshipWeb.ResetPasswordPage do
   use Hologram.Page
+  alias FellowshipWeb.{PasswordInput, Button, BrandMark}
+
   route("/reset-password/:token")
   param(:token, :string)
 
@@ -17,13 +19,13 @@ defmodule FellowshipWeb.ResetPasswordPage do
   def template do
     ~HOLO"""
     <main class="auth-shell">
-      <FellowshipWeb.BrandMark cid="reset_password_brand" />
+      <BrandMark cid="reset_password_brand" />
       <section class="auth-card">
         <p class="eyebrow">ACCOUNT RECOVERY</p>
         <h1>Choose a new password</h1>
         <p>Use at least 8 characters. This reset link can only be used once.</p>
         <form class="form-stack" $submit={action: :submit_reset_password}>
-          <FellowshipWeb.PasswordInput
+          <PasswordInput
             cid="reset_password"
             label="New password"
             name="password"
@@ -32,7 +34,7 @@ defmodule FellowshipWeb.ResetPasswordPage do
             minlength={8}
           />
           <p class="auth-message">{@message}</p>
-          <FellowshipWeb.Button cid="reset_password_submit" type="submit" class_name="full" loading={@loading}>Reset password</FellowshipWeb.Button>
+          <Button cid="reset_password_submit" type="submit" class_name="full" loading={@loading}>Reset password</Button>
         </form>
         <p class="auth-switch">
           <a href="/login">Back to sign in</a>

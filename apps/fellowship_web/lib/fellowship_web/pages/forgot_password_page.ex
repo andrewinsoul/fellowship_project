@@ -1,5 +1,6 @@
 defmodule FellowshipWeb.ForgotPasswordPage do
   use Hologram.Page
+  alias FellowshipWeb.{BrandMark, Input, Button}
 
   route("/forgot-password")
   layout(FellowshipWeb.MainLayout)
@@ -11,13 +12,13 @@ defmodule FellowshipWeb.ForgotPasswordPage do
   def template do
     ~HOLO"""
     <main class="auth-shell">
-      <FellowshipWeb.BrandMark cid="forgot_password_brand" />
+      <BrandMark cid="forgot_password_brand" />
       <section class="auth-card">
         <p class="eyebrow">ACCOUNT RECOVERY</p>
         <h1>Forgot your password?</h1>
         <p>Enter the email address associated with your account.</p>
         <form class="form-stack" $submit={action: :submit_forgot_password}>
-          <FellowshipWeb.Input
+          <Input
             cid="recovery_email"
             name="email"
             label="Email address"
@@ -26,7 +27,7 @@ defmodule FellowshipWeb.ForgotPasswordPage do
             required={true}
           />
           <p class="auth-message">{@message}</p>
-          <FellowshipWeb.Button cid="forgot_password_submit" type="submit" class_name="full" loading={@loading}>Continue</FellowshipWeb.Button>
+          <Button cid="forgot_password_submit" type="submit" class_name="full" loading={@loading}>Continue</FellowshipWeb.Button>
         </form>
         <p class="auth-switch">
           <a href="/login">Back to sign in</a>

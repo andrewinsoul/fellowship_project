@@ -1,5 +1,6 @@
 defmodule FellowshipWeb.LoginPage do
   use Hologram.Page
+  alias FellowshipWeb.{PasswordInput, BrandMark, Input, Button}
 
   route("/login")
   layout(FellowshipWeb.MainLayout)
@@ -15,13 +16,13 @@ defmodule FellowshipWeb.LoginPage do
   def template do
     ~HOLO"""
     <main class="auth-shell">
-      <FellowshipWeb.BrandMark cid="login_brand" />
+      <BrandMark cid="login_brand" />
       <section class="auth-card">
         <p class="eyebrow">YOUR COMMUNITY AWAITS</p>
         <h2>Sign in</h2>
         <p>Use your email address or phone number.</p>
         <form class="form-stack" $submit={action: :submit_login}>
-          <FellowshipWeb.Input
+          <Input
             cid="login_identifier"
             name="login"
             label="Email or phone number"
@@ -29,7 +30,7 @@ defmodule FellowshipWeb.LoginPage do
             autocomplete="username"
             required={true}
           />
-          <FellowshipWeb.PasswordInput
+          <PasswordInput
             cid="login_password"
             label="Password"
             name="password"
@@ -38,7 +39,7 @@ defmodule FellowshipWeb.LoginPage do
             minlength={0}
           />
           <p class="auth-message {@message_type}">{@message}</p>
-          <FellowshipWeb.Button cid="login_submit" type="submit" class_name="full" loading={@loading}>Sign in</FellowshipWeb.Button>
+          <Button cid="login_submit" type="submit" class_name="full" loading={@loading}>Sign in</Button>
         </form>
         <p class="auth-switch">
           Don't have an account?
