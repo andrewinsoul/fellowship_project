@@ -16,7 +16,7 @@ defmodule FellowshipWeb.RegisterPage do
     ~HOLO"""
     <main class="auth-shell">
     <BrandMark cid="register_brand" />
-      <section class="auth-card register-card" id="register-id">
+      <section class="auth-card register-card">
         <p class="eyebrow">JOIN THE COMMUNITY</p>
         <h2>Create an account</h2>
         <p>Enter your details to get started.</p>

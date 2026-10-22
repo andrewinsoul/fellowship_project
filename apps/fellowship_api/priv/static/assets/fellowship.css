@@ -1227,6 +1227,7 @@ button {
 .register-card {
   max-height: 80vh;
   overflow-y: auto;
+  width: 30vw;
 }
 @media (max-width: 700px) {
   .auth-panel {
@@ -1249,6 +1250,7 @@ button {
   }
   .register-card {
     max-height: none;
+    overflow-y: visible;
   }
   .auth-card {
     width: min(100%, 430px);
@@ -1414,10 +1416,6 @@ body.qr-modal-open {
 .meeting-card .meeting-row {
   min-height: 86px;
 }
-#register-id {
-  width: 30%;
-  min-width: 450px;
-}
 @media (max-width: 1050px) {
   .sidebar {
     width: 220px;
@@ -1492,8 +1490,5 @@ body.qr-modal-open {
   }
   .meeting-list-row {
     align-items: flex-start;
-  }
-  #register-id {
-    width: 100%;
   }
 }
