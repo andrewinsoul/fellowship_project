@@ -12,8 +12,9 @@
     let scanner = null;
     let loadingLibrary = null;
     let starting = false;
+    let scannerRunning = false;
     let requestInFlight = false;
-    let closed = false;
+    let closed = true;
 
     function setMessage(text, kind = "") {
       message.textContent = text;
@@ -35,6 +36,8 @@
         if (state === 2 || state === 3) await scanner.stop();
       } catch (error) {
         console.warn("[QR scanner] Could not stop scanner cleanly", error);
+      } finally {
+        scannerRunning = false;
       }
     }
 
@@ -103,7 +106,9 @@
             : payload.data?.message || "Your attendance has been recorded.",
           "success"
         );
-        window.setTimeout(() => closeModal(), 1200);
+        window.setTimeout(() => {
+          window.location.assign("/check-in-success");
+        }, 450);
       } catch (error) {
         if (closed) return;
         const text = error.code === "invalid_qr_code"
@@ -117,7 +122,17 @@
     }
 
     async function startScanner() {
-      if (starting || closed) return;
+      if (starting || scannerRunning || closed) return;
+      if (scanner) {
+        try {
+          if (scanner.getState() === 2) {
+            scannerRunning = true;
+            return;
+          }
+        } catch (e) {
+          console.error(e)
+        }
+      }
       starting = true;
       retryButton.hidden = true;
       setMessage("Preparing your camera…");
@@ -126,7 +141,13 @@
         const Html5Qrcode = await getScannerLibrary();
         if (closed) return;
 
-        if (!scanner) scanner = new Html5Qrcode(readerId);
+        const reader = document.getElementById(readerId);
+        if (!reader) throw new Error("The QR scanner area is unavailable. Please reopen the scanner.");
+
+        if (!scanner) {
+          reader.replaceChildren();
+          scanner = new Html5Qrcode(readerId);
+        }
         setMessage("Allow camera access when your browser asks, then point it at the meeting QR code.");
 
         await scanner.start(
@@ -135,6 +156,7 @@
           handleDecodedQr,
           () => { }
         );
+        scannerRunning = true;
         if (!closed) setMessage("Camera is ready. Point it at the meeting QR code.");
       } catch (error) {
         if (!closed) {
@@ -166,8 +188,10 @@
       startScanner();
     });
 
-    showModal();
-    startScanner();
+    if (modal.dataset.autoOpen === "true") {
+      showModal();
+      startScanner();
+    }
 
     window.addEventListener("pagehide", () => {
       closed = true;
@@ -184,12 +208,9 @@
     return false;
   }
 
-  if (!findModal()) {
-    // Hologram can swap pages without reloading the document. Watch for the
-    // authenticated HomePage modal to be inserted after this script executes.
-    const observer = new MutationObserver(() => {
-      if (findModal()) observer.disconnect();
-    });
-    observer.observe(document.documentElement, { childList: true, subtree: true });
-  }
+  findModal();
+  const observer = new MutationObserver(() => {
+    findModal();
+  });
+  observer.observe(document.documentElement, { childList: true, subtree: true });
 })();

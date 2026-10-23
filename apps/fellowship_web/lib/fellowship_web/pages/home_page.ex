@@ -10,15 +10,13 @@ defmodule FellowshipWeb.HomePage do
     member = FellowshipApi.Accounts.get_member(member_id)
     auth_token = get_session(server, :auth_token)
     meeting = FellowshipApi.Meetings.next_meeting()
-    current_meeting = FellowshipApi.Meetings.current_check_in_meeting()
     quotation = FellowshipApi.Quotations.latest()
 
     checked_in =
-      if current_meeting do
-        not is_nil(FellowshipApi.Attendance.get_attendance(member.id, current_meeting.id))
-      else
-        false
-      end
+      meeting &&
+        not is_nil(FellowshipApi.Attendance.get_attendance(member.id, meeting.id))
+
+    meeting_status = meeting_status(meeting, checked_in)
 
     member_name = member.full_name || "Fellowship member"
     member_first_name = member_name |> String.split() |> List.first() || "friend"
@@ -56,7 +54,13 @@ defmodule FellowshipWeb.HomePage do
         else: "Check back for the next scheduled fellowship"
       )
     )
-    |> put_state(:check_in_status, check_in_status(current_meeting, checked_in))
+    |> put_state(:meeting_status, meeting_status.label)
+    |> put_state(:meeting_status_class, meeting_status.class)
+    |> put_state(
+      :auto_open_scanner,
+      if(meeting_status.label == "In Progress" and not checked_in, do: "true", else: "false")
+    )
+    |> put_state(:check_in_status, check_in_status(meeting, checked_in))
     |> put_state(
       :quotation_text,
       if(quotation, do: quotation.text, else: "No quotation is available right now.")
@@ -147,7 +151,7 @@ defmodule FellowshipWeb.HomePage do
           <section class="card meeting-card">
             <div class="card-kicker">
               UP NEXT
-              <span class="status-pill">Coming soon</span>
+              <span class="status-pill {@meeting_status_class}">{@meeting_status}</span>
             </div>
             <div class="meeting-row">
               <div class="icon-tile">▦</div>
@@ -235,6 +239,7 @@ defmodule FellowshipWeb.HomePage do
         class="qr-modal"
         hidden
         data-auth-token="{@auth_token}"
+        data-auto-open="{@auto_open_scanner}"
         aria-hidden="true"
         role="dialog"
         aria-modal="true"
@@ -274,10 +279,27 @@ defmodule FellowshipWeb.HomePage do
     put_page(component, FellowshipWeb.LoginPage)
   end
 
+  defp meeting_status(nil, _checked_in),
+    do: %{label: "No meeting scheduled", class: ""}
+
+  defp meeting_status(_meeting, true),
+    do: %{label: "Checked-in", class: "present"}
+
+  defp meeting_status(meeting, false) do
+    now = DateTime.utc_now()
+
+    if DateTime.compare(now, meeting.starts_at) in [:eq, :gt] and
+         DateTime.compare(now, meeting.ends_at) in [:eq, :lt] do
+      %{label: "In Progress", class: "in-progress"}
+    else
+      %{label: "Coming soon", class: ""}
+    end
+  end
+
   defp check_in_status(nil, _checked_in), do: "Check-in is currently closed."
 
   defp check_in_status(_meeting, true),
-    do: "You are already checked in for the current fellowship."
+    do: "You are already checked in for this meeting."
 
   defp check_in_status(_meeting, false), do: "Check-in is open for the current fellowship."
 end
