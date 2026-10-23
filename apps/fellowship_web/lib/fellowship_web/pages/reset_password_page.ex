@@ -1,5 +1,7 @@
 defmodule FellowshipWeb.ResetPasswordPage do
   use Hologram.Page
+
+  alias Hologram.UI.Link
   alias FellowshipWeb.{PasswordInput, Button, BrandMark}
 
   route("/reset-password/:token")
@@ -37,7 +39,7 @@ defmodule FellowshipWeb.ResetPasswordPage do
           <Button cid="reset_password_submit" type="submit" class_name="full" loading={@loading}>Reset password</Button>
         </form>
         <p class="auth-switch">
-          <a href="/login">Back to sign in</a>
+          <Link to={FellowshipWeb.LoginPage}>Back to sign in</Link>
         </p>
       </section>
     </main>

@@ -1,6 +1,8 @@
 defmodule FellowshipWeb.ProfilePage do
   use Hologram.Page
 
+  alias Hologram.UI.Link
+
   route("/profile")
   layout(FellowshipWeb.MainLayout)
   middleware(FellowshipWeb.Middleware.RequireAuth)
@@ -23,61 +25,7 @@ defmodule FellowshipWeb.ProfilePage do
   def template do
     ~HOLO"""
     <div class="app-shell">
-      <aside class="sidebar">
-        <div class="brand">
-          <div class="brand-mark small">
-            <span>✝</span>
-            <i>●</i>
-            <i>●</i>
-          </div>
-          <div>
-            <b>FGBMFI</b>
-            <small>Connect</small>
-          </div>
-        </div>
-        <p class="chapter-label">YOUR FELLOWSHIP</p>
-        <nav>
-          <a class="nav-item" href="/home">
-            <span class="nav-icon">⌂</span>
-            Home
-          </a>
-          <a class="nav-item" href="/attendance">
-            <span class="nav-icon">▦</span>
-            Attendance
-          </a>
-          <a class="nav-item" href="/quotations">
-            <span class="nav-icon">▤</span>
-            Scripture
-          </a>
-          <a class="nav-item active" href="/profile">
-            <span class="nav-icon">○</span>
-            Profile
-          </a>
-          <a class="nav-item" href="/meetings">
-            <span class="nav-icon">◷</span>
-            Meetings
-          </a>
-          <a class="nav-item" href="/settings">
-            <span class="nav-icon">⚙</span>
-            Preferences
-          </a>
-        </nav>
-        <div class="sidebar-bottom">
-          <div class="mini-member">
-            <div class="avatar">{@member_initials}</div>
-            <div>
-              <b>{@member_name}</b>
-              <small>Member</small>
-            </div>
-          </div>
-          <form $submit={command: :logout}>
-            <button class="nav-item logout" type="submit">
-              <span class="nav-icon">↪</span>
-              Sign out
-            </button>
-          </form>
-        </div>
-      </aside>
+      <FellowshipWeb.Sidebar cid="sidebar" active_page="profile" member_name={@member_name} member_initials={@member_initials} />
       <main class="main-area">
         <header class="topbar">
           <div>
@@ -115,10 +63,10 @@ defmodule FellowshipWeb.ProfilePage do
               </div>
             </form>
             <div class="settings-links">
-              <a href="/settings">
+              <Link to={FellowshipWeb.SettingsPage}>
                 ♧ Notification preferences
                 <span>→</span>
-              </a>
+              </Link>
               <form $submit={command: :logout}>
                 <button type="submit">
                   ↪ Sign out
@@ -132,22 +80,22 @@ defmodule FellowshipWeb.ProfilePage do
       </main>
 
       <nav class="mobile-nav" aria-label="Mobile navigation">
-        <a href="/home">
+        <Link to={FellowshipWeb.HomePage}>
           <span aria-hidden="true">⌂</span>
           <small>Home</small>
-        </a>
-        <a href="/attendance">
+        </Link>
+        <Link to={FellowshipWeb.AttendancePage}>
           <span aria-hidden="true">▦</span>
           <small>Attendance</small>
-        </a>
-        <a href="/quotations">
+        </Link>
+        <Link to={FellowshipWeb.QuotationsPage}>
           <span aria-hidden="true">▤</span>
           <small>Scripture</small>
-        </a>
-        <a class="active" href="/profile" aria-current="page">
+        </Link>
+        <Link to={FellowshipWeb.ProfilePage} class="active">
           <span aria-hidden="true">○</span>
           <small>Profile</small>
-        </a>
+        </Link>
       </nav>
     </div>
     """

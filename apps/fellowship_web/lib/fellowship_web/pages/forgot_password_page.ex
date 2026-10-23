@@ -1,5 +1,7 @@
 defmodule FellowshipWeb.ForgotPasswordPage do
   use Hologram.Page
+
+  alias Hologram.UI.Link
   alias FellowshipWeb.{BrandMark, Input, Button}
 
   route("/forgot-password")
@@ -30,7 +32,7 @@ defmodule FellowshipWeb.ForgotPasswordPage do
           <Button cid="forgot_password_submit" type="submit" class_name="full" loading={@loading}>Continue</FellowshipWeb.Button>
         </form>
         <p class="auth-switch">
-          <a href="/login">Back to sign in</a>
+          <Link to={FellowshipWeb.LoginPage}>Back to sign in</Link>
         </p>
       </section>
     </main>

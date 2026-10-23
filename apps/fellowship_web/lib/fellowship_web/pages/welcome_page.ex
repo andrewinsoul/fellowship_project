@@ -1,5 +1,7 @@
 defmodule FellowshipWeb.WelcomePage do
   use Hologram.Page
+
+  alias Hologram.UI.Link
   alias FellowshipWeb.{Button, IconTile}
 
   route("/")
@@ -26,8 +28,8 @@ defmodule FellowshipWeb.WelcomePage do
           <h2>FGBMFI Connect</h2>
           <p>One place for your fellowship activities.</p>
           <div class="form-stack">
-            <Button cid="welcome_sign_in" href="/login" class_name="full">Sign in</Button>
-            <Button cid="welcome_register" href="/register" variant="secondary" class_name="full">Create an account</Button>
+            <Link to={FellowshipWeb.LoginPage} class="button primary full">Sign in</Link>
+            <Link to={FellowshipWeb.RegisterPage} class="button secondary full">Create an account</Link>
           </div>
           <p class="fineprint">A community of faith, fellowship, and service.</p>
         </div>

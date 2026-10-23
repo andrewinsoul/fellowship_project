@@ -1,5 +1,7 @@
 defmodule FellowshipWeb.RegisterPage do
   use Hologram.Page
+
+  alias Hologram.UI.Link
   alias FellowshipWeb.{BrandMark, Button, Input, PasswordInput, Select, HomePage}
 
   route("/register")
@@ -77,7 +79,7 @@ defmodule FellowshipWeb.RegisterPage do
         </form>
         <p class="auth-switch">
           Already have an account?
-          <a href="/login">Sign in</a>
+          <Link to={FellowshipWeb.LoginPage}>Sign in</Link>
         </p>
         <p class="fineprint">A community of faith, fellowship, and service.</p>
       </section>
